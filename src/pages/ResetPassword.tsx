@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import Card from "../compponents/Card";
 import Input from "../compponents/Input";
 import Button from "../compponents/Button";
+import ResetPasswordBanner from "../compponents/ResetPasswordBanner";
 
 type FormData = {
   password: string;
@@ -17,8 +18,7 @@ export default function ResetPassword() {
     formState: { errors },
   } = useForm<FormData>();
 
-  const password = watch("password");
-
+  
   const onSubmit = (data: FormData) => {
     console.log("New Password:", data);
   };
@@ -27,56 +27,7 @@ export default function ResetPassword() {
     <div className="min-h-screen grid grid-cols-2">
 
       {/* LEFT SIDE */}
-      <div className="bg-gradient-to-b from-purple-100 to-purple-200 flex items-center justify-center p-12">
-        <div className="max-w-md">
-
-          {/* TAG */}
-          <p className="text-xs font-semibold text-purple-600 bg-purple-100 inline-block px-3 py-1 rounded-full">
-            PASSWORD RESET
-          </p>
-
-          {/* TITLE */}
-          <h1 className="text-3xl font-bold mt-4 leading-snug">
-            Create a new{" "}
-            <span className="text-purple-600">password</span>
-          </h1>
-
-          {/* DESCRIPTION */}
-          <p className="mt-4 text-gray-600 text-sm leading-relaxed">
-            Your new password must be different from previously used passwords.
-            Keep it strong and secure to protect your account.
-          </p>
-
-          {/* FEATURES */}
-          <div className="mt-8 space-y-4">
-
-            <div className="flex gap-3 items-start">
-              <div className="w-8 h-8 flex items-center justify-center bg-purple-100 text-purple-600 rounded-lg">
-                🔐
-              </div>
-              <div>
-                <p className="font-medium text-sm">Strong Security</p>
-                <p className="text-xs text-gray-500">
-                  Protect your account with a strong password.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-3 items-start">
-              <div className="w-8 h-8 flex items-center justify-center bg-purple-100 text-purple-600 rounded-lg">
-                ⚡
-              </div>
-              <div>
-                <p className="font-medium text-sm">Quick Update</p>
-                <p className="text-xs text-gray-500">
-                  Change your password instantly and continue.
-                </p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
+      <ResetPasswordBanner />
 
       {/* RIGHT SIDE */}
       <div className="flex items-center justify-center">
@@ -96,11 +47,8 @@ export default function ResetPassword() {
               type="password"
               placeholder="Enter new password"
               {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Minimum 6 characters",
-                },
+                required: { value: true, message: "password is required !" },
+                pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[^\s]{8,}$/, message: 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character !' }
               })}
               error={errors.password}
             />
@@ -110,9 +58,8 @@ export default function ResetPassword() {
               type="password"
               placeholder="Confirm new password"
               {...register("confirmPassword", {
-                required: "Please confirm password",
-                validate: (value) =>
-                  value === password || "Passwords do not match",
+                required: { value: true, message: "Confirm password is required !" },
+                validate: (value) => value === watch('password') || "Password must be match !"
               })}
               error={errors.confirmPassword}
             />
@@ -121,7 +68,7 @@ export default function ResetPassword() {
               Update Password →
             </Button>
           </form>
-          
+
         </Card>
       </div>
     </div>

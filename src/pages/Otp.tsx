@@ -2,16 +2,60 @@
 import { useEffect, useRef, useState } from "react";
 import Card from "../compponents/Card";
 import Button from "../compponents/Button";
+import OtpBanner from "../compponents/OtpBanner";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { resendOtpService, verifyOtpService } from "../services/auth.service";
 
 export default function Otp() {
+
+  const [searchParams] = useSearchParams()
+  const email = searchParams.get("email")
+
+  const navigate = useNavigate()
+    
+  const OTP_KEY = "otp_expiry";
+
+  const getInitialTime = () => {
+    const stored = localStorage.getItem(OTP_KEY);
+
+    if (!stored) return 60;
+
+    const expiry = parseInt(stored, 10);
+    const now = Date.now();
+
+    const diff = Math.floor((expiry - now) / 1000);
+
+    return diff > 0 ? diff : 0;
+  };
+
   const [otp, setOtp] = useState(Array(6).fill(""));
-  const [time, setTime] = useState(60);
+  const [time, setTime] = useState(getInitialTime);
   const inputs = useRef<(HTMLInputElement | null)[]>([]);
 
   // TIMER
+
+  useEffect(() => {
+    const stored = localStorage.getItem(OTP_KEY);
+
+    if (!stored) {
+      const expiry = Date.now() + 60 * 1000;
+      localStorage.setItem(OTP_KEY, expiry.toString());
+    }
+  }, []);
+
   useEffect(() => {
     if (time === 0) return;
-    const timer = setInterval(() => setTime((t) => t - 1), 1000);
+
+    const timer = setInterval(() => {
+      setTime((prev) => {
+        if (prev <= 1) {
+          localStorage.removeItem(OTP_KEY);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
     return () => clearInterval(timer);
   }, [time]);
 
@@ -35,70 +79,31 @@ export default function Otp() {
     }
   };
 
-  const resendOtp = () => {
+  const resendOtp = async() => {
+    const expiry = Date.now() + 60 * 1000;
+    localStorage.setItem(OTP_KEY, expiry.toString());
     setTime(60);
+
+    console.log(email)
+
+    await resendOtpService(email as string)
+
     console.log("Resend OTP");
   };
 
-  const submit = () => {
-    console.log(otp.join(""));
+
+  const submit = async() => {
+    console.log(otp)
+    const otpStr = otp.join("")
+    console.log(otpStr , email)
+    await verifyOtpService({email : email as string , otp : otpStr} , navigate)
   };
 
   return (
     <div className="min-h-screen grid grid-cols-2">
 
       {/* LEFT SIDE */}
-      <div className="bg-gray-100 flex items-center justify-center p-12">
-        <div className="max-w-md">
-
-          {/* TAG */}
-          <p className="text-xs font-semibold text-purple-600 bg-purple-100 inline-block px-3 py-1 rounded-full">
-            IDENTITY SECURED
-          </p>
-
-          {/* TITLE */}
-          <h1 className="text-3xl font-bold mt-4 leading-snug">
-            Confirm your{" "}
-            <span className="text-purple-600">email address</span>
-          </h1>
-
-          {/* DESCRIPTION */}
-          <p className="mt-4 text-gray-600 text-sm leading-relaxed">
-            We've sent a 6-digit verification code to{" "}
-            <b>alex.design@maa-n.io</b>.  
-            Enter it below to verify your identity and unlock your creator account.
-          </p>
-
-          {/* FEATURES */}
-          <div className="mt-8 space-y-4">
-
-            <div className="flex gap-3 items-start">
-              <div className="w-8 h-8 flex items-center justify-center bg-purple-100 text-purple-600 rounded-lg">
-                🔒
-              </div>
-              <div>
-                <p className="font-medium text-sm">Enhanced Security</p>
-                <p className="text-xs text-gray-500">
-                  Multi-layer protection for your creator profile.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-3 items-start">
-              <div className="w-8 h-8 flex items-center justify-center bg-purple-100 text-purple-600 rounded-lg">
-                ⚡
-              </div>
-              <div>
-                <p className="font-medium text-sm">Instant Access</p>
-                <p className="text-xs text-gray-500">
-                  Unlock all features immediately after verification.
-                </p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
+      <OtpBanner email={email as string}/>
 
       {/* RIGHT SIDE */}
       <div className="flex items-center justify-center">
