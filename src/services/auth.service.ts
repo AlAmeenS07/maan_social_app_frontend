@@ -1,8 +1,11 @@
 import toast from "react-hot-toast";
-import { otpVerifyApi, registerApi, resendOtpApi } from "../api/auth.api";
+import { forgotPasswordApi, forgotPasswordVerifyOtpApi, loginApi, logoutApi, otpVerifyApi, registerApi, resendOtpApi, resetPasswordApi, userDataApi } from "../api/auth.api";
 import type { RegisterFormData } from "../pages/Register";
 import { isAxiosError } from "axios";
 import type { NavigateFunction } from "react-router-dom";
+import type { AppDispatch } from "../store/store";
+import { logout, setUser } from "../store/slices/user.slice";
+import type { LoginFormData } from "../pages/Login";
 
 
 export const registerService = async (data: RegisterFormData, navigate: NavigateFunction) => {
@@ -11,6 +14,7 @@ export const registerService = async (data: RegisterFormData, navigate: Navigate
 
         if (res.success) {
             toast.success(res.message)
+            localStorage.setItem("otp_expiry", (Date.now() + 60000).toString());
             navigate(`/verify-otp?email=${data.email}`)
         }
 
@@ -28,12 +32,86 @@ export const registerService = async (data: RegisterFormData, navigate: Navigate
 }
 
 
-export const verifyOtpService = async (data: { email: string, otp: string }, navigate: NavigateFunction) => {
+export const verifyOtpService = async (data: { email: string, otp: string }, navigate: NavigateFunction, dispatch: AppDispatch) => {
     try {
 
-        const res : any = await otpVerifyApi(data)
+        const res: any = await otpVerifyApi(data)
 
-        if(res.success){
+        if (res.success) {
+            dispatch(setUser(res.data))
+            toast.success(res.message)
+            navigate("/")
+        }
+
+    } catch (error) {
+        if (isAxiosError(error)) {
+            toast.error(error.response?.data.message)
+        }
+        else if (error instanceof Error) {
+            toast.error(error?.message)
+        }
+        else {
+            toast.error("Something error !")
+        }
+    }
+}
+
+
+export const resendOtpService = async (data: string) => {
+    try {
+
+        const res = await resendOtpApi(data)
+
+        if (res.success) {
+            toast.success(res.message)
+        }
+
+    } catch (error) {
+        if (isAxiosError(error)) {
+            toast.error(error.response?.data.message)
+        }
+        else if (error instanceof Error) {
+            toast.error(error?.message)
+        }
+        else {
+            toast.error("Something error !")
+        }
+    }
+}
+
+
+export const loginUserService = async (data: LoginFormData, navigate: NavigateFunction, dispatch: AppDispatch) => {
+    try {
+
+        const res = await loginApi(data)
+
+        if (res.success) {
+            dispatch(setUser(res.data))
+            toast.success(res.message)
+            navigate("/")
+        }
+
+    } catch (error) {
+        if (isAxiosError(error)) {
+            toast.error(error.response?.data.message)
+        }
+        else if (error instanceof Error) {
+            toast.error(error?.message)
+        }
+        else {
+            toast.error("Something error !")
+        }
+    }
+}
+
+
+export const logoutUserService = async (navigate: NavigateFunction, dispatch: AppDispatch) => {
+    try {
+
+        const res = await logoutApi()
+
+        if (res.success) {
+            dispatch(logout())
             toast.success(res.message)
             navigate("/login")
         }
@@ -52,15 +130,17 @@ export const verifyOtpService = async (data: { email: string, otp: string }, nav
 }
 
 
-export const resendOtpService = async(data : string) =>{
+export const forgotPasswordService = async (data: { email: string }, navigate: NavigateFunction) => {
     try {
 
-        const res = await resendOtpApi(data)
+        const res = await forgotPasswordApi(data)
 
-        if(res.success){
+        if (res.success) {
             toast.success(res.message)
+            localStorage.setItem("otp_expiry", (Date.now() + 60000).toString());
+            navigate(`/verify-otp?email=${data.email}&fp=true`)
         }
-        
+
     } catch (error) {
         if (isAxiosError(error)) {
             toast.error(error.response?.data.message)
@@ -70,6 +150,76 @@ export const resendOtpService = async(data : string) =>{
         }
         else {
             toast.error("Something error !")
-        }        
+        }
+    }
+}
+
+
+export const forgotPasswordVerifyOtpService = async (data: { email: string, otp: string }, navigate: NavigateFunction, dispatch: AppDispatch) => {
+    try {
+
+        const res: any = await forgotPasswordVerifyOtpApi(data)
+
+        if (res.success) {
+            toast.success(res.message)
+            navigate("/reset-password")
+        }
+
+    } catch (error) {
+        if (isAxiosError(error)) {
+            toast.error(error.response?.data.message)
+        }
+        else if (error instanceof Error) {
+            toast.error(error?.message)
+        }
+        else {
+            toast.error("Something error !")
+        }
+    }
+}
+
+
+export const resetPasswordService = async (data: { password: string }, navigate: NavigateFunction) => {
+    try {
+
+        const res = await resetPasswordApi(data)
+
+        if (res.success) {
+            toast.success(res.message)
+            navigate("/login")
+        }
+
+    } catch (error) {
+        if (isAxiosError(error)) {
+            toast.error(error.response?.data.message)
+        }
+        else if (error instanceof Error) {
+            toast.error(error?.message)
+        }
+        else {
+            toast.error("Something error !")
+        }
+    }
+}
+
+
+export const fetchUserDataService = async () => {
+    try {
+
+        const res = await userDataApi()
+
+        console.log("user data" , res)
+
+        return res.data
+    } catch (error) {
+        if (isAxiosError(error)) {
+            toast.error(error.response?.data.message)
+        }
+        else if (error instanceof Error) {
+            toast.error(error?.message)
+        }
+        else {
+            toast.error("Something error !")
+        }
     }
 }

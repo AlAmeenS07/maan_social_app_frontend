@@ -4,7 +4,9 @@ import Card from "../compponents/Card";
 import Input from "../compponents/Input";
 import Button from "../compponents/Button";
 import LoginBanner from "../compponents/LoginBanner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUserService } from "../services/auth.service";
 
 export type LoginFormData = {
   email: string;
@@ -12,14 +14,15 @@ export type LoginFormData = {
 };
 
 export default function Login() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginFormData>();
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log("Login:", data);
+  const {register,handleSubmit,formState: { errors }} = useForm<LoginFormData>();
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+
+  const onSubmit = async(data: LoginFormData) => {
+    await loginUserService(data , navigate , dispatch)
   };
 
   return (

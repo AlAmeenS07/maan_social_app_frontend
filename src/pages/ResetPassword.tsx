@@ -4,6 +4,8 @@ import Card from "../compponents/Card";
 import Input from "../compponents/Input";
 import Button from "../compponents/Button";
 import ResetPasswordBanner from "../compponents/ResetPasswordBanner";
+import { resetPasswordService } from "../services/auth.service";
+import { useNavigate } from "react-router-dom";
 
 type FormData = {
   password: string;
@@ -11,16 +13,13 @@ type FormData = {
 };
 
 export default function ResetPassword() {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<FormData>();
 
+  const {register,handleSubmit,watch,formState: { errors }} = useForm<FormData>();
+
+  const navigate = useNavigate()
   
-  const onSubmit = (data: FormData) => {
-    console.log("New Password:", data);
+  const onSubmit = async(data: FormData) => {
+    await resetPasswordService({password : data.password} , navigate)
   };
 
   return (
@@ -48,7 +47,7 @@ export default function ResetPassword() {
               placeholder="Enter new password"
               {...register("password", {
                 required: { value: true, message: "password is required !" },
-                pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[^\s]{8,}$/, message: 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character !' }
+                pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[^\s]{6,}$/, message: 'Password must be at least 6 characters and include uppercase, lowercase, number, and special character !' }
               })}
               error={errors.password}
             />

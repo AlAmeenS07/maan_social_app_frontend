@@ -4,106 +4,70 @@ import Card from "../compponents/Card";
 import Button from "../compponents/Button";
 import OtpBanner from "../compponents/OtpBanner";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { resendOtpService, verifyOtpService } from "../services/auth.service";
+import { forgotPasswordVerifyOtpService, verifyOtpService } from "../services/auth.service";
+import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
+import { getInitialTime, handleChange, handleKeyDown, resendOtp } from "../helpers/auth.helper";
 
 export default function Otp() {
 
   const [searchParams] = useSearchParams()
   const email = searchParams.get("email")
+  const fp = searchParams.get("fp")
 
   const navigate = useNavigate()
-    
+  const dispatch = useDispatch()
+
   const OTP_KEY = "otp_expiry";
 
-  const getInitialTime = () => {
-    const stored = localStorage.getItem(OTP_KEY);
-
-    if (!stored) return 60;
-
-    const expiry = parseInt(stored, 10);
-    const now = Date.now();
-
-    const diff = Math.floor((expiry - now) / 1000);
-
-    return diff > 0 ? diff : 0;
-  };
-
+  const [time, setTime] = useState(() => getInitialTime(OTP_KEY));
   const [otp, setOtp] = useState(Array(6).fill(""));
-  const [time, setTime] = useState(getInitialTime);
+  const [resend, setResend] = useState(false)
   const inputs = useRef<(HTMLInputElement | null)[]>([]);
 
   // TIMER
-
   useEffect(() => {
-    const stored = localStorage.getItem(OTP_KEY);
-
-    if (!stored) {
-      const expiry = Date.now() + 60 * 1000;
-      localStorage.setItem(OTP_KEY, expiry.toString());
-    }
-  }, []);
-
-  useEffect(() => {
-    if (time === 0) return;
-
     const timer = setInterval(() => {
-      setTime((prev) => {
-        if (prev <= 1) {
-          localStorage.removeItem(OTP_KEY);
-          return 0;
-        }
-        return prev - 1;
-      });
+      const stored = localStorage.getItem(OTP_KEY);
+
+      if (!stored) {
+        setTime(0);
+        return;
+      }
+
+      const expiry = parseInt(stored, 10);
+      const diff = Math.floor((expiry - Date.now()) / 1000);
+
+      if (diff <= 0) {
+        localStorage.removeItem(OTP_KEY);
+        setResend(false)
+        setTime(0);
+        clearInterval(timer);
+      } else {
+        setTime(diff);
+      }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [time]);
-
-  // INPUT CHANGE
-  const handleChange = (value: string, index: number) => {
-    if (!/^\d?$/.test(value)) return;
-
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-
-    if (value && index < 5) {
-      inputs.current[index + 1]?.focus();
-    }
-  };
-
-  // BACKSPACE
-  const handleKeyDown = (e: any, index: number) => {
-    if (e.key === "Backspace" && !otp[index] && index > 0) {
-      inputs.current[index - 1]?.focus();
-    }
-  };
-
-  const resendOtp = async() => {
-    const expiry = Date.now() + 60 * 1000;
-    localStorage.setItem(OTP_KEY, expiry.toString());
-    setTime(60);
-
-    console.log(email)
-
-    await resendOtpService(email as string)
-
-    console.log("Resend OTP");
-  };
+  }, [resend]);
 
 
-  const submit = async() => {
-    console.log(otp)
+  const submit = async () => {
     const otpStr = otp.join("")
-    console.log(otpStr , email)
-    await verifyOtpService({email : email as string , otp : otpStr} , navigate)
+    if (otpStr.length != 6) {
+      return toast.error("Enter valid otp !")
+    }
+    if (fp == "true") {
+      return await forgotPasswordVerifyOtpService({ email: email as string, otp: otpStr }, navigate, dispatch)
+    }
+    await verifyOtpService({ email: email as string, otp: otpStr }, navigate, dispatch)
   };
 
   return (
     <div className="min-h-screen grid grid-cols-2">
 
       {/* LEFT SIDE */}
-      <OtpBanner email={email as string}/>
+      <OtpBanner email={email as string} />
 
       {/* RIGHT SIDE */}
       <div className="flex items-center justify-center">
@@ -124,8 +88,8 @@ export default function Otp() {
                 ref={(el: any) => (inputs.current[i] = el)}
                 value={digit}
                 maxLength={1}
-                onChange={(e) => handleChange(e.target.value, i)}
-                onKeyDown={(e) => handleKeyDown(e, i)}
+                onChange={(e) => handleChange(e.target.value, i , setOtp , otp , inputs)}
+                onKeyDown={(e) => handleKeyDown(e, i , otp , inputs)}
                 className="w-12 h-12 text-center border rounded-lg text-lg focus:ring-2 focus:ring-purple-500"
               />
             ))}
@@ -141,7 +105,7 @@ export default function Otp() {
           {/* RESEND */}
           {time === 0 && (
             <button
-              onClick={resendOtp}
+              onClick={() => resendOtp(OTP_KEY , setOtp , setTime , setResend , email as string)}
               className="text-purple-600 text-sm mb-4 block mx-auto hover:underline"
             >
               Resend OTP

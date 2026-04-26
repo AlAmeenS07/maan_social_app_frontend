@@ -1,31 +1,49 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../compponents/Button";
+import { useDispatch, useSelector } from "react-redux";
+import type { UserState } from "../store/slices/user.slice";
+import { logoutUserService } from "../services/auth.service";
 
 export default function Home() {
   const navigate = useNavigate();
+  const dispatch = useDispatch()
+
+  const user: any = useSelector((state: UserState) => state.user)
 
   return (
     <div className="min-h-screen bg-gray-50">
 
       {/* 🔝 NAVBAR */}
       <div className="flex justify-between items-center px-8 py-4 bg-white shadow-sm">
-        <h1 className="text-xl font-bold text-purple-600">MyApp</h1>
+        <h1 className="text-xl font-bold text-purple-600">MaaN</h1>
 
-        <div className="flex gap-4">
+        {user.accessToken ?
           <button
-            onClick={() => navigate("/login")}
-            className="text-gray-600 hover:text-purple-600"
+            onClick={async () => await logoutUserService(navigate, dispatch)}
+            className="text-red-600 hover:text-red-600"
           >
-            Login
+            Logout
           </button>
+          :
+          <div className="flex gap-4">
+            <button
+              onClick={() => navigate("/login")}
+              className="text-gray-600 hover:text-purple-600"
+            >
+              Login
+            </button>
 
-          <Button
-            onClick={() => navigate("/register")}
-            className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white"
-          >
-            Sign Up
-          </Button>
-        </div>
+            <Button
+              onClick={() => navigate("/register")}
+              className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white"
+            >
+              Sign Up
+            </Button>
+          </div>
+        }
+
+        <Link to={"/forgot-password"} className="text-xl">Go forgott-password</Link>
+
       </div>
 
       {/* 🚀 HERO SECTION */}
@@ -42,21 +60,25 @@ export default function Home() {
             clean UI, and scalable architecture.
           </p>
 
-          <div className="flex gap-4">
-            <Button
-              onClick={() => navigate("/register")}
-              className="px-6 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white"
-            >
-              Get Started →
-            </Button>
+          {
+            user.accessToken ? "" :
+              <div className="flex gap-4">
+                <Button
+                  onClick={() => navigate("/register")}
+                  className="px-6 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white"
+                >
+                  Get Started →
+                </Button>
 
-            <button
-              onClick={() => navigate("/login")}
-              className="px-6 py-3 border rounded-lg hover:bg-gray-100"
-            >
-              Login
-            </button>
-          </div>
+                <button
+                  onClick={() => navigate("/login")}
+                  className="px-6 py-3 border rounded-lg hover:bg-gray-100"
+                >
+                  Login
+                </button>
+              </div>
+          }
+
         </div>
 
         {/* RIGHT */}
@@ -106,17 +128,21 @@ export default function Home() {
           Ready to get started?
         </h3>
 
-        <Button
-          onClick={() => navigate("/register")}
-          className="px-8 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white"
-        >
-          Create Account →
-        </Button>
+        {
+          user.accessToken ? "" :
+            <Button
+              onClick={() => navigate("/register")}
+              className="px-8 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white"
+            >
+              Create Account →
+            </Button>
+        }
+
       </div>
 
       {/* 🔻 FOOTER */}
       <div className="text-center text-sm text-gray-400 pb-6">
-        © 2026 MyApp. All rights reserved.
+        © 2026 MaaN. All rights reserved.
       </div>
     </div>
   );

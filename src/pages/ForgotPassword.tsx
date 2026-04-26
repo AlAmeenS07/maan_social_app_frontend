@@ -4,21 +4,20 @@ import Card from "../compponents/Card";
 import Input from "../compponents/Input";
 import Button from "../compponents/Button";
 import ForgotPasswordBanner from "../compponents/ForgotPasswordBanner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { forgotPasswordService } from "../services/auth.service";
 
 type FormData = {
   email: string;
 };
 
 export default function ForgotPassword() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
+  const {register,handleSubmit,formState: { errors },} = useForm<FormData>();
 
-  const onSubmit = (data: FormData) => {
-    console.log("Send reset link to:", data);
+  const navigate = useNavigate()
+
+  const onSubmit = async(data: FormData) => {
+    await forgotPasswordService(data , navigate)
   };
 
   return (

@@ -6,10 +6,11 @@ type UserType = {
     name : string
     user_name : string
     email : string
+    is_admin : boolean
 }
 
 
-interface UserState {
+export interface UserState {
     user : UserType | null
     accessToken: string | null;
 }
@@ -24,7 +25,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<UserState>) => {
-      state.user = action.payload.user;
+      state.user = action.payload.user
       state.accessToken = action.payload.accessToken
     },
     logout: (state) => {

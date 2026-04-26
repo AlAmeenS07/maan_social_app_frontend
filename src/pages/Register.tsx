@@ -98,7 +98,7 @@ export default function Register() {
                         <Input type="password" label="Password"
                             {...register("password", {
                                 required: { value: true, message: "password is required !" },
-                                pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[^\s]{8,}$/, message: 'Password must be at least 8 characters and include uppercase, lowercase, number, and special character' }
+                                pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[^\s]{6,}$/, message: 'Password must be at least 6 characters and include uppercase, lowercase, number, and special character' }
                             })}
                             error={errors.confirmPassword}
                         />
