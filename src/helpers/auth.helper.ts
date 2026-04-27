@@ -1,5 +1,5 @@
 import type { Dispatch, MutableRefObject, SetStateAction } from "react";
-import { resendOtpService } from "../services/auth.service";
+import { resendOtpService } from "../services/user/auth.service";
 
 type InputRefs = MutableRefObject<(HTMLInputElement | null)[]>;
 

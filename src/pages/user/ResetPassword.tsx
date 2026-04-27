@@ -1,10 +1,10 @@
 // pages/ResetPassword.tsx
 import { useForm } from "react-hook-form";
-import Card from "../compponents/Card";
-import Input from "../compponents/Input";
-import Button from "../compponents/Button";
-import ResetPasswordBanner from "../compponents/ResetPasswordBanner";
-import { resetPasswordService } from "../services/auth.service";
+import Card from "../../compponents/Card";
+import Input from "../../compponents/Input";
+import Button from "../../compponents/Button";
+import ResetPasswordBanner from "../../compponents/ResetPasswordBanner";
+import { resetPasswordService } from "../../services/user/auth.service";
 import { useNavigate } from "react-router-dom";
 
 type FormData = {

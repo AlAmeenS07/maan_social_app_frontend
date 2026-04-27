@@ -1,6 +1,6 @@
-import type { LoginFormData } from "../pages/Login";
-import type { RegisterFormData } from "../pages/Register";
-import axiosInstance from "./axios";
+import type { LoginFormData } from "../../pages/user/Login";
+import type { RegisterFormData } from "../../pages/user/Register";
+import axiosInstance from "../../config/axios";
 
 
 export const registerApi = async(data : RegisterFormData) => {

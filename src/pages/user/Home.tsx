@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
-import Button from "../compponents/Button";
+import Button from "../../compponents/Button";
 import { useDispatch, useSelector } from "react-redux";
-import type { UserState } from "../store/slices/user.slice";
-import { logoutUserService } from "../services/auth.service";
+import type { UserState } from "../../store/slices/user.slice";
+import { logoutUserService } from "../../services/user/auth.service";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -41,8 +41,6 @@ export default function Home() {
             </Button>
           </div>
         }
-
-        <Link to={"/forgot-password"} className="text-xl">Go forgott-password</Link>
 
       </div>
 

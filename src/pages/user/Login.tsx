@@ -1,12 +1,12 @@
 // pages/Login.tsx
 import { useForm } from "react-hook-form";
-import Card from "../compponents/Card";
-import Input from "../compponents/Input";
-import Button from "../compponents/Button";
-import LoginBanner from "../compponents/LoginBanner";
+import Card from "../../compponents/Card";
+import Input from "../../compponents/Input";
+import Button from "../../compponents/Button";
+import LoginBanner from "../../compponents/LoginBanner";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUserService } from "../services/auth.service";
+import { loginUserService } from "../../services/user/auth.service";
 
 export type LoginFormData = {
   email: string;

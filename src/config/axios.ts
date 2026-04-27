@@ -1,10 +1,10 @@
 import axios from "axios";
 import { store } from "../store/store";
 import { setUser } from "../store/slices/user.slice";
-import { refreshTokenApi } from "./auth.api";
+import { refreshTokenApi } from "../api/user/auth.api";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000", // change to your backend
+  baseURL: "http://localhost:5000", 
   withCredentials: true,
 });
 

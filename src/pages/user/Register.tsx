@@ -1,11 +1,11 @@
 // pages/Register.tsx
 import { useForm } from "react-hook-form";
-import Card from "../compponents/Card";
-import Input from "../compponents/Input";
-import Button from "../compponents/Button";
-import RegistrationBanner from "../compponents/RegistrationBanner";
+import Card from "../../compponents/Card";
+import Input from "../../compponents/Input";
+import Button from "../../compponents/Button";
+import RegistrationBanner from "../../compponents/RegistrationBanner";
 import { Link, useNavigate } from "react-router-dom";
-import { registerService } from "../services/auth.service";
+import { registerService } from "../../services/user/auth.service";
 
 export type RegisterFormData = {
     fullname: string;

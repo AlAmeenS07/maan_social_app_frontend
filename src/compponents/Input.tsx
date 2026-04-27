@@ -8,7 +8,6 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 
 export default function Input({ label, error, ...props }: Props) {
 
-    console.log(label , error , props)
   return (
     <div className="space-y-1">
       <label className="text-sm text-gray-600">{label}</label>

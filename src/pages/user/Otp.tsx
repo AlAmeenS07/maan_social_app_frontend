@@ -1,13 +1,13 @@
 // pages/Otp.tsx
 import { useEffect, useRef, useState } from "react";
-import Card from "../compponents/Card";
-import Button from "../compponents/Button";
-import OtpBanner from "../compponents/OtpBanner";
+import Card from "../../compponents/Card";
+import Button from "../../compponents/Button";
+import OtpBanner from "../../compponents/OtpBanner";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { forgotPasswordVerifyOtpService, verifyOtpService } from "../services/auth.service";
+import { forgotPasswordVerifyOtpService, verifyOtpService } from "../../services/user/auth.service";
 import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
-import { getInitialTime, handleChange, handleKeyDown, resendOtp } from "../helpers/auth.helper";
+import { getInitialTime, handleChange, handleKeyDown, resendOtp } from "../../helpers/auth.helper";
 
 export default function Otp() {
 

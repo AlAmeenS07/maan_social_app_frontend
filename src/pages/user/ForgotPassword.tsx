@@ -1,11 +1,11 @@
 // pages/ForgotPassword.tsx
 import { useForm } from "react-hook-form";
-import Card from "../compponents/Card";
-import Input from "../compponents/Input";
-import Button from "../compponents/Button";
-import ForgotPasswordBanner from "../compponents/ForgotPasswordBanner";
+import Card from "../../compponents/Card";
+import Input from "../../compponents/Input";
+import Button from "../../compponents/Button";
+import ForgotPasswordBanner from "../../compponents/ForgotPasswordBanner";
 import { Link, useNavigate } from "react-router-dom";
-import { forgotPasswordService } from "../services/auth.service";
+import { forgotPasswordService } from "../../services/user/auth.service";
 
 type FormData = {
   email: string;

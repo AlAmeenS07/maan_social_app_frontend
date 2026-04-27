@@ -1,11 +1,11 @@
 import toast from "react-hot-toast";
-import { forgotPasswordApi, forgotPasswordVerifyOtpApi, loginApi, logoutApi, otpVerifyApi, registerApi, resendOtpApi, resetPasswordApi, userDataApi } from "../api/auth.api";
-import type { RegisterFormData } from "../pages/Register";
+import { forgotPasswordApi, forgotPasswordVerifyOtpApi, loginApi, logoutApi, otpVerifyApi, registerApi, resendOtpApi, resetPasswordApi, userDataApi } from "../../api/user/auth.api";
+import type { RegisterFormData } from "../../pages/user/Register";
 import { isAxiosError } from "axios";
 import type { NavigateFunction } from "react-router-dom";
-import type { AppDispatch } from "../store/store";
-import { logout, setUser } from "../store/slices/user.slice";
-import type { LoginFormData } from "../pages/Login";
+import type { AppDispatch } from "../../store/store";
+import { logout, setUser } from "../../store/slices/user.slice";
+import type { LoginFormData } from "../../pages/user/Login";
 
 
 export const registerService = async (data: RegisterFormData, navigate: NavigateFunction) => {
@@ -207,8 +207,6 @@ export const fetchUserDataService = async () => {
     try {
 
         const res = await userDataApi()
-
-        console.log("user data" , res)
 
         return res.data
     } catch (error) {
