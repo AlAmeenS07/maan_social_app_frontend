@@ -1,56 +1,3 @@
-// // pages/admin/Users.jsx
-// import UserTable from "../../compponents/UserTable";
-// import AdminLayout from "../../layout/AdminLayout";
-// // import UserTable from "../../components/user/UserTable";
-
-// export default function Users() {
-//   return (
-//     <AdminLayout>
-//       <div className="space-y-6">
-
-//         {/* HEADER */}
-//         <div className="flex justify-between items-center">
-//           <div>
-//             <h1 className="text-2xl font-semibold">User Management</h1>
-//             <p className="text-gray-500 text-sm">
-//               Manage system users, monitor activity, and handle account statuses.
-//             </p>
-//           </div>
-
-//           {/* <button className="bg-green-600 text-white px-4 py-2 rounded-lg">
-//             + Add New User
-//           </button> */}
-//         </div>
-
-//         {/* SEARCH + FILTER */}
-//         <div className="flex gap-3">
-//           <input
-//             placeholder="Search users by name, email or username..."
-//             className="flex-1 border rounded-lg px-4 py-2"
-//           />
-
-//           <button className="border px-4 py-2 rounded-lg">
-//             All Status
-//           </button>
-
-//           <button className="border px-4 py-2 rounded-lg">
-//             Date Range
-//           </button>
-//         </div>
-
-//         {/* TABLE */}
-//         <UserTable />
-
-//       </div>
-//     </AdminLayout>
-//   );
-// }
-
-
-
-
-
-
 
 // pages/admin/Users.jsx
 
@@ -59,7 +6,8 @@ import { useSearchParams } from "react-router-dom";
 import AdminLayout from "../../layout/AdminLayout";
 import UserTable from "../../compponents/UserTable";
 import Pagination from "../../compponents/pagination";
-import { adminUsersService } from "../../services/admin/admin.user.service";
+import { adminUsersService, adminUserStatusService } from "../../services/admin/admin.user.service";
+import Swal from "sweetalert2";
 
 
 export default function Users() {
@@ -71,15 +19,17 @@ export default function Users() {
     const [search, setSearch] = useState(searchParams.get("search") || "")
     const [from, setFrom] = useState(searchParams.get("from") || "")
     const [to, setTo] = useState(searchParams.get("to") || "")
-    const [limit , setLimit] = useState(searchParams.get("limit") || 10)
+    const [limit, setLimit] = useState(searchParams.get("limit") || 10)
 
     const [users, setUsers] = useState<any>([])
     const [totalPages, setTotalPages] = useState(0)
 
+    console.log("users-apge", users)
+
     // FETCH USERS
     useEffect(() => {
-        adminUsersService({search,status,from,to,page} , setUsers , setTotalPages)
-    }, [page, search, status, from, to , limit]);
+        adminUsersService({ search, status, from, to, page, limit }, setUsers, setTotalPages)
+    }, [page, search, status, from, to, limit]);
 
 
     useEffect(() => {
@@ -89,9 +39,26 @@ export default function Users() {
             from: from || "",
             to: to || "",
             page: String(page) || "1",
-            limit : String(limit) || "10"
+            limit: String(limit) || "10"
         });
-    }, [page , search , status , from , to , limit]);
+    }, [page, search, status, from, to, limit]);
+
+    async function changeStatus(id: string , status : boolean) {
+        console.log("here-fun", id)
+        const result = await Swal.fire({
+            title: `${status ? "Unblock User" : "Block User"}`,
+            text: `User will be ${status ? "unblocked" : "blocked"} !`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#ef4444",
+            cancelButtonColor: "#6b7280",
+            confirmButtonText: `${status ? "Yes, Unblock" : "Yes, Block"}`,
+            cancelButtonText: "Cancel",
+        })
+        if(result.isConfirmed){
+            await adminUserStatusService(id, setUsers)
+        }
+    }
 
 
     return (
@@ -120,12 +87,12 @@ export default function Users() {
                     {/* STATUS */}
                     <select
                         value={status}
-                        onChange={(e) => setStatus( e.target.value)}
+                        onChange={(e) => setStatus(e.target.value)}
                         className="border px-4 py-2 rounded-lg"
                     >
                         <option value="">All Status</option>
-                        <option value="active">Active</option>
-                        <option value="blocked">Blocked</option>
+                        <option value="active">active</option>
+                        <option value="blocked">blocked</option>
                     </select>
 
                     {/* DATE RANGE GROUP */}
@@ -149,18 +116,37 @@ export default function Users() {
 
                     </div>
 
+                    {/* LIMIT */}
+                    <select
+                        value={limit}
+                        onChange={(e) => {
+                            setLimit(Number(e.target.value));
+                            setPage(1)
+                        }}
+                        className="border px-3 py-2 rounded-lg"
+                    >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={15}>15</option>
+                        <option value={20}>20</option>
+                    </select>
+
                 </div>
                 {/* TABLE */}
-                <UserTable users={users} />
+                <UserTable users={users} changeStatus={changeStatus} />
 
                 {/* PAGINATION */}
-                <div className="flex justify-center">
-                    <Pagination
-                        currentPage={page}
-                        totalPages={totalPages}
-                        setCurrentPage={setPage}
-                    />
-                </div>
+                {
+                    totalPages > 1 &&
+                    <div className="flex justify-center">
+                        <Pagination
+                            currentPage={page}
+                            totalPages={totalPages}
+                            setCurrentPage={setPage}
+                        />
+                    </div>
+                }
+
             </div>
         </AdminLayout>
     );

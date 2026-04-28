@@ -1,6 +1,7 @@
 import type { LoginFormData } from "../../pages/user/Login";
 import type { RegisterFormData } from "../../pages/user/Register";
 import axiosInstance from "../../config/axios";
+import axios from "axios";
 
 
 export const registerApi = async(data : RegisterFormData) => {
@@ -46,7 +47,7 @@ export const logoutApi = async() => {
 }
 
 export const refreshTokenApi = async() => {
-    const res = await axiosInstance.get(import.meta.env.VITE_USER_SERVICE_BASE_URL + "/user/refresh-token")
+    const res = await axios.get("http://localhost:5000" + import.meta.env.VITE_USER_SERVICE_BASE_URL + "/user/refresh-token" , {withCredentials : true})
     return res.data
 }
 

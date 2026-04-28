@@ -1,14 +1,33 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Button from "../../compponents/Button";
 import { useDispatch, useSelector } from "react-redux";
 import type { UserState } from "../../store/slices/user.slice";
 import { logoutUserService } from "../../services/user/auth.service";
+import Swal from "sweetalert2";
 
 export default function Home() {
   const navigate = useNavigate();
   const dispatch = useDispatch()
 
   const user: any = useSelector((state: UserState) => state.user)
+
+  async function logout() {
+    const result = await Swal.fire({
+      title: "Logout?",
+      text: "You will be signed out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, logout",
+      cancelButtonText: "Cancel",
+    });
+
+    if (result.isConfirmed) {
+      await logoutUserService(navigate, dispatch);
+    }
+  }
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -19,8 +38,8 @@ export default function Home() {
 
         {user.accessToken ?
           <button
-            onClick={async () => await logoutUserService(navigate, dispatch)}
-            className="text-red-600 hover:text-red-600"
+            onClick={logout}
+            className="text-red-600 border rounded-md border-red-500 px-2 py-1 hover:text-red-600 hover:bg-red-50"
           >
             Logout
           </button>
