@@ -1,7 +1,16 @@
 // components/user/UserTable.jsx
 
 
-export default function UserTable({users , changeStatus} : {users : any[] , changeStatus : (id : string , status : boolean)=> any}) {
+type TableUser = {
+  id: string;
+  name: string;
+  email: string;
+  user_name: string;
+  createdAt: string;
+  is_blocked: boolean;
+};
+
+export default function UserTable({users , changeStatus} : {users : TableUser[] , changeStatus : (id : string , status : boolean)=> void}) {
 
 
     return (
@@ -59,13 +68,6 @@ export default function UserTable({users , changeStatus} : {users : any[] , chan
                     ))}
                 </tbody>
             </table>
-
-            {/* FOOTER */}
-            {/* <div className="flex justify-between items-center p-4 text-sm text-gray-500">
-                <span>Showing 1–6 of 128,430 users</span>
-
-                <Pagination setCurrentPage={setCurrentPage} currentPage={currentPage} totalPages={10}/>
-            </div> */}
 
         </div>
     );

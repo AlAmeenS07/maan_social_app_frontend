@@ -6,8 +6,9 @@ import { useSearchParams } from "react-router-dom";
 import AdminLayout from "../../layout/AdminLayout";
 import UserTable from "../../compponents/UserTable";
 import Pagination from "../../compponents/pagination";
-import { adminUsersService, adminUserStatusService } from "../../services/admin/admin.user.service";
 import Swal from "sweetalert2";
+import { useAdminUsers } from "../../hooks/admin/users/useAdminUsers";
+import { useAdminUsersStatus } from "../../hooks/admin/users/useAdminUsersStatus";
 
 
 export default function Users() {
@@ -21,16 +22,11 @@ export default function Users() {
     const [to, setTo] = useState(searchParams.get("to") || "")
     const [limit, setLimit] = useState(searchParams.get("limit") || 10)
 
-    const [users, setUsers] = useState<any>([])
-    const [totalPages, setTotalPages] = useState(0)
+    const { data, isLoading } = useAdminUsers({ search, status, from, to, page, limit })
+    const { mutate: toggleStatusMutate } = useAdminUsersStatus({ search, status, from, to, page, limit })
 
-    console.log("users-apge", users)
-
-    // FETCH USERS
-    useEffect(() => {
-        adminUsersService({ search, status, from, to, page, limit }, setUsers, setTotalPages)
-    }, [page, search, status, from, to, limit]);
-
+    const users = data?.data?.users || []
+    const totalPages = data?.data?.totalPages || 0
 
     useEffect(() => {
         setSearchParams({
@@ -43,7 +39,7 @@ export default function Users() {
         });
     }, [page, search, status, from, to, limit]);
 
-    async function changeStatus(id: string , status : boolean) {
+    async function changeStatus(id: string, status: boolean) {
         console.log("here-fun", id)
         const result = await Swal.fire({
             title: `${status ? "Unblock User" : "Block User"}`,
@@ -55,9 +51,20 @@ export default function Users() {
             confirmButtonText: `${status ? "Yes, Unblock" : "Yes, Block"}`,
             cancelButtonText: "Cancel",
         })
-        if(result.isConfirmed){
-            await adminUserStatusService(id, setUsers)
+        if (result.isConfirmed) {
+            toggleStatusMutate(id)
         }
+    }
+
+
+    if (isLoading) {
+        return (
+            <AdminLayout>
+                <div className="flex justify-center items-center h-64">
+                    <div className="w-6 h-6 border-4 border-gray-300 border-t-purple-500 rounded-full animate-spin"></div>
+                </div>
+            </AdminLayout>
+        );
     }
 
 

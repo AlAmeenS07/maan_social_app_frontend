@@ -4,10 +4,7 @@ import { useForm } from "react-hook-form";
 import AdminLoginBanner from "../../compponents/AdminLoginBanner";
 import Button from "../../compponents/Button";
 import Input from "../../compponents/Input";
-import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import type { UserState } from "../../store/slices/user.slice";
-import { adminLoginService } from "../../services/admin/admin.auth.service";
+import { useAdminLogin } from "../../hooks/admin/auth/useAdminLogin";
 
 export type LoginFormData = {
   email: string
@@ -19,13 +16,12 @@ export default function AdminLogin() {
 
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>()
 
-  const loading = useSelector((state: UserState) => state.loading)
+  const {mutate , isPending} = useAdminLogin()
 
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
 
   async function onSubmit(data: LoginFormData) {
-    await adminLoginService(data , navigate , dispatch)
+    mutate(data)
+    // await adminLoginService(data , navigate , dispatch)
     console.log("adminLogin", data)
   }
 
@@ -68,20 +64,15 @@ export default function AdminLogin() {
               error={errors.password}
             />
 
-            <Button
+           <Button
               type="submit"
-              disabled={loading}
-              className="w-full py-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 text-white font-medium hover:opacity-90 disabled:opacity-60 flex items-center justify-center gap-2"
+              isLoading={isPending}
+              loadingText="Logging..."
+              className="w-full py-2 rounded-lg bg-gradient-to-r from-green-500 to-green-600 text-white font-medium disabled:opacity-60 flex items-center justify-center gap-2"
             >
-              {loading ? (
-                <>
-                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                  Logging in...
-                </>
-              ) : (
-                "Login"
-              )}
+              Login
             </Button>
+
           </form>
 
         </div>

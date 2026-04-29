@@ -4,20 +4,21 @@ import Card from "../../compponents/Card";
 import Input from "../../compponents/Input";
 import Button from "../../compponents/Button";
 import ForgotPasswordBanner from "../../compponents/ForgotPasswordBanner";
-import { Link, useNavigate } from "react-router-dom";
-import { forgotPasswordService } from "../../services/user/auth.service";
+import { Link } from "react-router-dom";
+import { useForgotPassword } from "../../hooks/user/auth/useForgotPassword";
 
 type FormData = {
   email: string;
 };
 
 export default function ForgotPassword() {
-  const {register,handleSubmit,formState: { errors },} = useForm<FormData>();
+  const { register, handleSubmit, formState: { errors }, } = useForm<FormData>();
 
-  const navigate = useNavigate()
+  const { mutate, isPending } = useForgotPassword()
 
-  const onSubmit = async(data: FormData) => {
-    await forgotPasswordService(data , navigate)
+
+  const onSubmit = async (data: FormData) => {
+    mutate(data)
   };
 
   return (
@@ -49,9 +50,15 @@ export default function ForgotPassword() {
               error={errors.email}
             />
 
-            <Button type="submit" className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium hover:opacity-90">
-              Send Reset Link →
+            <Button
+              type="submit"
+              isLoading={isPending}
+              loadingText="loading..."
+              className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium disabled:opacity-60 flex items-center justify-center gap-2"
+            >
+              Reset Password
             </Button>
+
           </form>
 
           {/* EXTRA LINKS */}

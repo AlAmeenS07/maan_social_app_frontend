@@ -4,8 +4,8 @@ import Card from "../../compponents/Card";
 import Input from "../../compponents/Input";
 import Button from "../../compponents/Button";
 import RegistrationBanner from "../../compponents/RegistrationBanner";
-import { Link, useNavigate } from "react-router-dom";
-import { registerService } from "../../services/user/auth.service";
+import { Link } from "react-router-dom";
+import { useRegister } from "../../hooks/user/auth/useRegister";
 
 export type RegisterFormData = {
     fullname: string;
@@ -20,10 +20,11 @@ export type RegisterFormData = {
 export default function Register() {
     const { register, handleSubmit, watch, formState: { errors } } = useForm<RegisterFormData>();
 
-    const navigate = useNavigate()
+    const { isPending, mutate } = useRegister()
+
 
     async function registerSubmit(data: RegisterFormData) {
-        await registerService(data , navigate)
+        mutate(data)
     }
 
 
@@ -114,13 +115,18 @@ export default function Register() {
 
                         {/* TERMS */}
                         <div className="flex gap-2 text-sm">
-                            <input type="checkbox" {...register("terms", { required: "Required" })}  />
+                            <input type="checkbox" {...register("terms", { required: "Required" })} />
                             <p>I agree to <span className="text-blue-500 underline cursor-pointer">Terms & Conditions</span></p>
                         </div>
                         {errors.terms && <p className="text-xs text-red-500">Agree terms and conditions !</p>}
 
-                        <Button className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium hover:opacity-90">
-                            Create account →
+                        <Button
+                            type="submit"
+                            isLoading={isPending}
+                            loadingText="Creating account..."
+                            className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium disabled:opacity-60 flex items-center justify-center gap-2"
+                        >
+                            Register
                         </Button>
                     </form>
 

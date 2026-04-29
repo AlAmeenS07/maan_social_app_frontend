@@ -2,6 +2,7 @@ import axios from "axios";
 import { store } from "../store/store";
 import { setUser } from "../store/slices/user.slice";
 import { refreshTokenApi } from "../api/user/auth.api";
+import type { RefreshApiPayload } from "../App";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:5000", 
@@ -32,7 +33,9 @@ axiosInstance.interceptors.response.use(
 
       try {
 
-        const res : any = await refreshTokenApi()
+        const res : RefreshApiPayload = await refreshTokenApi()
+
+        console.log("res-intreceptor" , res)
 
         if(res.success){
           store.dispatch(setUser(res.data))
@@ -44,6 +47,7 @@ axiosInstance.interceptors.response.use(
 
         return axiosInstance(originalRequest);
       } catch (err) {
+        console.log("res-inter-err" , err)
         return Promise.reject(err)
       }
     }

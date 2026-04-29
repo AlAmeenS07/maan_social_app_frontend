@@ -4,9 +4,8 @@ import Card from "../../compponents/Card";
 import Input from "../../compponents/Input";
 import Button from "../../compponents/Button";
 import LoginBanner from "../../compponents/LoginBanner";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { loginUserService } from "../../services/user/auth.service";
+import { Link } from "react-router-dom";
+import { useLogin } from "../../hooks/user/auth/useLogin";
 
 export type LoginFormData = {
   email: string;
@@ -15,14 +14,13 @@ export type LoginFormData = {
 
 export default function Login() {
 
-  const {register,handleSubmit,formState: { errors }} = useForm<LoginFormData>();
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
 
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const { mutate, isPending } = useLogin()
 
 
-  const onSubmit = async(data: LoginFormData) => {
-    await loginUserService(data , navigate , dispatch)
+  const onSubmit = async (data: LoginFormData) => {
+    mutate(data)
   };
 
   return (
@@ -72,9 +70,15 @@ export default function Login() {
               </Link>
             </div>
 
-            <Button type="submit" className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium hover:opacity-90">
-              Login →
+            <Button
+              type="submit"
+              isLoading={isPending}
+              loadingText="Logging..."
+              className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium disabled:opacity-60 flex items-center justify-center gap-2"
+            >
+              Login
             </Button>
+
           </form>
 
           {/* SIGN UP LINK */}

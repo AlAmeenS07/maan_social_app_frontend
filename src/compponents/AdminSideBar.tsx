@@ -1,9 +1,8 @@
 // components/layout/Sidebar.jsx
 import { Home, Users, FileText, LogOut } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { adminLogoutService } from "../services/admin/admin.auth.service";
-import { useDispatch } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
+import { useAdminLogout } from "../hooks/admin/auth/userAdminLogout";
 
 const menu = [
     { name: "Dashboard", icon: Home, to: "/admin/dashboard" },
@@ -14,8 +13,7 @@ const menu = [
 export default function AdminSidebar() {
     const location = useLocation();
 
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const {mutate } = useAdminLogout()
 
     const handleLogout = async () => {
 
@@ -31,7 +29,7 @@ export default function AdminSidebar() {
         });
 
         if (result.isConfirmed) {
-            await adminLogoutService(navigate, dispatch);
+            mutate()
         }
     };
 

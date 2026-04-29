@@ -1,15 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../compponents/Button";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import type { UserState } from "../../store/slices/user.slice";
-import { logoutUserService } from "../../services/user/auth.service";
+// import { logoutUserService } from "../../services/user/auth.service";
 import Swal from "sweetalert2";
+import { useLogout } from "../../hooks/user/auth/useLogout";
 
 export default function Home() {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
 
   const user: any = useSelector((state: UserState) => state.user)
+
+  const {mutate} = useLogout()
 
   async function logout() {
     const result = await Swal.fire({
@@ -24,7 +26,8 @@ export default function Home() {
     });
 
     if (result.isConfirmed) {
-      await logoutUserService(navigate, dispatch);
+      mutate()
+      // await logoutUserService(navigate, dispatch);
     }
   }
 

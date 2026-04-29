@@ -3,11 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import Card from "../../compponents/Card";
 import Button from "../../compponents/Button";
 import OtpBanner from "../../compponents/OtpBanner";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { forgotPasswordVerifyOtpService, verifyOtpService } from "../../services/user/auth.service";
-import { useDispatch } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getInitialTime, handleChange, handleKeyDown, resendOtp } from "../../helpers/auth.helper";
+import { useVerifyOtp } from "../../hooks/user/auth/useVeriftyOtp";
+import { useResendOtp } from "../../hooks/user/auth/useResendOtp";
+import { useForgotPasswordVerifyOtp } from "../../hooks/user/auth/useForgotPasswordVerifyOtp";
 
 export default function Otp() {
 
@@ -15,8 +16,9 @@ export default function Otp() {
   const email = searchParams.get("email")
   const fp = searchParams.get("fp")
 
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const { mutate : verifyOtpMutate, isPending } = useVerifyOtp()
+  const {mutate : resendOtpMutate} = useResendOtp()
+  const {mutate : forgotPasswordVerifyOtpMutate} = useForgotPasswordVerifyOtp()
 
   const OTP_KEY = "otp_expiry";
 
@@ -58,9 +60,9 @@ export default function Otp() {
       return toast.error("Enter valid otp !")
     }
     if (fp == "true") {
-      return await forgotPasswordVerifyOtpService({ email: email as string, otp: otpStr }, navigate, dispatch)
+      return forgotPasswordVerifyOtpMutate({ email: email as string, otp: otpStr })
     }
-    await verifyOtpService({ email: email as string, otp: otpStr }, navigate, dispatch)
+    verifyOtpMutate({ email: email as string, otp: otpStr })
   };
 
   return (
@@ -88,8 +90,8 @@ export default function Otp() {
                 ref={(el: any) => (inputs.current[i] = el)}
                 value={digit}
                 maxLength={1}
-                onChange={(e) => handleChange(e.target.value, i , setOtp , otp , inputs)}
-                onKeyDown={(e) => handleKeyDown(e, i , otp , inputs)}
+                onChange={(e) => handleChange(e.target.value, i, setOtp, otp, inputs)}
+                onKeyDown={(e) => handleKeyDown(e, i, otp, inputs)}
                 className="w-12 h-12 text-center border rounded-lg text-lg focus:ring-2 focus:ring-purple-500"
               />
             ))}
@@ -105,17 +107,22 @@ export default function Otp() {
           {/* RESEND */}
           {time === 0 && (
             <button
-              onClick={() => resendOtp(OTP_KEY , setOtp , setTime , setResend , email as string)}
+              onClick={() => resendOtp(OTP_KEY, setOtp, setTime, setResend, resendOtpMutate, email as string)}
               className="text-purple-600 text-sm mb-4 block mx-auto hover:underline"
             >
               Resend OTP
             </button>
           )}
 
-          <Button onClick={submit} className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium hover:opacity-90">
-            Verify Now →
+          <Button
+            onClick={submit}
+            type="submit"
+            isLoading={isPending}
+            loadingText="Verifing..."
+            className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium disabled:opacity-60 flex items-center justify-center gap-2"
+          >
+            Verify Now
           </Button>
-
 
         </Card>
       </div>

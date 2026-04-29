@@ -4,8 +4,7 @@ import Card from "../../compponents/Card";
 import Input from "../../compponents/Input";
 import Button from "../../compponents/Button";
 import ResetPasswordBanner from "../../compponents/ResetPasswordBanner";
-import { resetPasswordService } from "../../services/user/auth.service";
-import { useNavigate } from "react-router-dom";
+import { useResetPassword } from "../../hooks/user/auth/useResetPassword";
 
 type FormData = {
   password: string;
@@ -16,10 +15,12 @@ export default function ResetPassword() {
 
   const {register,handleSubmit,watch,formState: { errors }} = useForm<FormData>();
 
-  const navigate = useNavigate()
+  const {mutate , isPending} = useResetPassword()
+
   
   const onSubmit = async(data: FormData) => {
-    await resetPasswordService({password : data.password} , navigate)
+    mutate(data)
+    // await resetPasswordService({password : data.password} , navigate)
   };
 
   return (
@@ -62,10 +63,20 @@ export default function ResetPassword() {
               })}
               error={errors.confirmPassword}
             />
-
+{/* 
             <Button type="submit" className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium hover:opacity-90">
               Update Password →
+            </Button> */}
+
+            <Button
+              type="submit"
+              isLoading={isPending}
+              loadingText="reseting..."
+              className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium disabled:opacity-60 flex items-center justify-center gap-2"
+            >
+              Update Passoword
             </Button>
+
           </form>
 
         </Card>

@@ -1,5 +1,4 @@
 import type { Dispatch, MutableRefObject, SetStateAction } from "react";
-import { resendOtpService } from "../services/user/auth.service";
 
 type InputRefs = MutableRefObject<(HTMLInputElement | null)[]>;
 
@@ -27,7 +26,6 @@ export const handleChange = (value: string, index: number, setOtp: Dispatch<SetS
     }
 };
 
-// BACKSPACE
 export const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number, otp: string[], inputs: InputRefs) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
         inputs.current[index - 1]?.focus();
@@ -40,6 +38,7 @@ export const resendOtp = async (
     setOtp : Dispatch<SetStateAction<string[]>> , 
     setTime : Dispatch<SetStateAction<number>> , 
     setResend : Dispatch<SetStateAction<boolean>> , 
+    resendOtpMutate : (email : string) => void,
     email : string
 ) => {
     const expiry = Date.now() + 60 * 1000;
@@ -49,5 +48,5 @@ export const resendOtp = async (
     setTime(60);
     setResend(true)
 
-    await resendOtpService(email as string);
+    resendOtpMutate(email)
 };
