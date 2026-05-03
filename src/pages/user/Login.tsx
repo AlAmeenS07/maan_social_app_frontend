@@ -13,84 +13,99 @@ export type LoginFormData = {
 };
 
 export default function Login() {
-
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
-
-  const { mutate, isPending } = useLogin()
-
+  const { mutate, isPending } = useLogin();
 
   const onSubmit = async (data: LoginFormData) => {
-    mutate(data)
+    mutate(data);
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-2">
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
 
-      {/* LEFT SIDE */}
-      <LoginBanner />
+      {/* LEFT SIDE (Hidden on mobile) */}
+      <div className="hidden lg:flex">
+        <LoginBanner />
+      </div>
 
       {/* RIGHT SIDE */}
-      <div className="flex items-center justify-center">
-        <Card>
-          <h2 className="text-lg font-semibold text-center mb-2">
-            Welcome back
-          </h2>
+      <div className="flex justify-center w-full min-h-screen px-4 sm:px-6 md:px-8">
 
-          <p className="text-center text-sm text-gray-500 mb-4">
-            Enter your credentials to continue
-          </p>
+        {/* This wrapper controls vertical centering safely */}
+        <div className="w-full max-w-md mx-auto flex items-center">
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="w-full">
+            <Card>
 
-            <Input
-              label="Email Address"
-              type="email"
-              placeholder="Enter your email"
-              {...register("email", {
-                required: { value: true, message: "Email is required !" },
-                pattern: { value: /^\S+@\S+$/i, message: "Invalid Email !" }
-              })}
-              error={errors.email}
-            />
+              <h2 className="text-lg sm:text-xl font-semibold text-center mb-2">
+                Welcome back
+              </h2>
 
-            <Input
-              label="Password"
-              type="password"
-              placeholder="Enter your password"
-              {...register("password", {
-                required: "Password is required",
-              })}
-              error={errors.password}
-            />
+              <p className="text-center text-sm text-gray-500 mb-4">
+                Enter your credentials to continue
+              </p>
 
-            {/* FORGOT PASSWORD */}
-            <div className="text-right text-sm">
-              <Link to={"/forgot-password"} className="text-purple-600 cursor-pointer hover:underline">
-                Forgot Password?
-              </Link>
-            </div>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-            <Button
-              type="submit"
-              isLoading={isPending}
-              loadingText="Logging..."
-              className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium disabled:opacity-60 flex items-center justify-center gap-2"
-            >
-              Login
-            </Button>
+                <Input
+                  label="Email Address"
+                  type="email"
+                  placeholder="Enter your email"
+                  {...register("email", {
+                    required: { value: true, message: "Email is required !" },
+                    pattern: { value: /^\S+@\S+$/i, message: "Invalid Email !" }
+                  })}
+                  error={errors.email}
+                />
 
-          </form>
+                <Input
+                  label="Password"
+                  type="password"
+                  placeholder="Enter your password"
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
+                  error={errors.password}
+                />
 
-          {/* SIGN UP LINK */}
-          <div className="text-center mt-4 text-xs text-gray-500">
-            <p>
-              Don’t have an account?{" "}
-              <Link to={"/register"} className="text-purple-600 cursor-pointer hover:underline">
-                Sign up
-              </Link>
-            </p>
+                {/* FORGOT PASSWORD */}
+                <div className="text-right text-sm">
+                  <Link
+                    to={"/forgot-password"}
+                    className="text-purple-600 hover:underline"
+                  >
+                    Forgot Password?
+                  </Link>
+                </div>
+
+                <Button
+                  type="submit"
+                  isLoading={isPending}
+                  loadingText="Logging..."
+                  className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium disabled:opacity-60 flex items-center justify-center gap-2"
+                >
+                  Login
+                </Button>
+
+              </form>
+
+              {/* SIGN UP LINK */}
+              <div className="text-center mt-4 text-xs text-gray-500">
+                <p>
+                  Don’t have an account?{" "}
+                  <Link
+                    to={"/register"}
+                    className="text-purple-600 hover:underline"
+                  >
+                    Sign up
+                  </Link>
+                </p>
+              </div>
+
+            </Card>
           </div>
-        </Card>
+
+        </div>
       </div>
     </div>
   );

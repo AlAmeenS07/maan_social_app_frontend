@@ -1,167 +1,104 @@
-import { useNavigate } from "react-router-dom";
-import Button from "../../compponents/Button";
-import { useSelector } from "react-redux";
-import type { UserState } from "../../store/slices/user.slice";
-// import { logoutUserService } from "../../services/user/auth.service";
+
+// pages/Home.tsx
 import Swal from "sweetalert2";
 import { useLogout } from "../../hooks/user/auth/useLogout";
 
 export default function Home() {
-  const navigate = useNavigate();
-
-  const user: any = useSelector((state: UserState) => state.user)
-
-  const {mutate} = useLogout()
+  const { mutate } = useLogout();
 
   async function logout() {
     const result = await Swal.fire({
       title: "Logout?",
-      text: "You will be signed out of your account.",
+      text: "You will be signed out.",
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#ef4444",
-      cancelButtonColor: "#6b7280",
-      confirmButtonText: "Yes, logout",
       cancelButtonText: "Cancel",
     });
 
-    if (result.isConfirmed) {
-      mutate()
-      // await logoutUserService(navigate, dispatch);
-    }
+    if (result.isConfirmed) mutate();
   }
-
 
   return (
     <div className="min-h-screen bg-gray-50">
 
       {/* 🔝 NAVBAR */}
-      <div className="flex justify-between items-center px-8 py-4 bg-white shadow-sm">
-        <h1 className="text-xl font-bold text-purple-600">MaaN</h1>
+      <div className="flex justify-between items-center px-4 sm:px-6 md:px-10 py-4 bg-white shadow-sm">
+        <h1 className="text-lg sm:text-xl font-bold text-purple-600">MaaN</h1>
 
-        {user.accessToken ?
           <button
             onClick={logout}
-            className="text-red-600 border rounded-md border-red-500 px-2 py-1 hover:text-red-600 hover:bg-red-50"
+            className="text-red-600 border border-red-500 px-3 py-1 rounded-md hover:bg-red-50 text-sm"
           >
             Logout
           </button>
-          :
-          <div className="flex gap-4">
-            <button
-              onClick={() => navigate("/login")}
-              className="text-gray-600 hover:text-purple-600"
-            >
-              Login
-            </button>
-
-            <Button
-              onClick={() => navigate("/register")}
-              className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white"
-            >
-              Sign Up
-            </Button>
-          </div>
-        }
-
       </div>
 
-      {/* 🚀 HERO SECTION */}
-      <div className="grid grid-cols-2 items-center px-12 py-16">
+      {/* 🚀 HERO */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 items-center px-4 sm:px-6 md:px-10 lg:px-16 py-16 gap-10">
 
         {/* LEFT */}
-        <div>
-          <h2 className="text-4xl font-bold mb-4">
-            Build Something <span className="text-purple-600">Amazing</span>
-          </h2>
+        <div className="text-center lg:text-left">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
+            Build your <span className="text-purple-600">identity</span>  
+            <br />
+            beyond social media
+          </h1>
 
-          <p className="text-gray-500 mb-6">
-            A modern authentication system with OTP verification,
-            clean UI, and scalable architecture.
+          <p className="mt-4 text-gray-600 text-sm sm:text-base">
+            MaaN is a next-generation platform where you can create,
+            connect, and monetize your digital presence — all in one place.
           </p>
-
-          {
-            user.accessToken ? "" :
-              <div className="flex gap-4">
-                <Button
-                  onClick={() => navigate("/register")}
-                  className="px-6 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white"
-                >
-                  Get Started →
-                </Button>
-
-                <button
-                  onClick={() => navigate("/login")}
-                  className="px-6 py-3 border rounded-lg hover:bg-gray-100"
-                >
-                  Login
-                </button>
-              </div>
-          }
-
         </div>
 
-        {/* RIGHT */}
+        {/* RIGHT VISUAL */}
         <div className="flex justify-center">
-          <div className="w-80 h-80 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl opacity-80 blur-2xl"></div>
+          <div className="relative">
+            <div className="w-64 h-64 sm:w-80 sm:h-80 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl blur-2xl opacity-70"></div>
+            <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xl">
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* ⭐ FEATURES */}
-      <div className="px-12 py-12">
-        <h3 className="text-2xl font-semibold text-center mb-10">
-          Features
-        </h3>
+      {/* 🌟 FEATURES */}
+      <div className="px-4 sm:px-6 md:px-10 lg:px-16 py-16 bg-white">
+        <h2 className="text-xl sm:text-2xl font-semibold text-center mb-10">
+          Why MaaN?
+        </h2>
 
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
           {[
             {
-              title: "Secure Auth",
-              desc: "JWT + OTP based authentication system",
+              title: "Unified Identity",
+              desc: "Create a single powerful profile across platforms.",
             },
             {
-              title: "Modern UI",
-              desc: "Clean and responsive design with Tailwind",
+              title: "Smart Connections",
+              desc: "Connect with people that actually matter.",
             },
             {
-              title: "Scalable",
-              desc: "Redux + API architecture ready for growth",
+              title: "Monetization Ready",
+              desc: "Turn your presence into opportunities.",
             },
           ].map((item, i) => (
             <div
               key={i}
-              className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition"
+              className="bg-gray-50 p-6 rounded-xl hover:shadow-md transition"
             >
-              <h4 className="font-semibold mb-2 text-purple-600">
+              <h3 className="font-semibold text-purple-600 mb-2">
                 {item.title}
-              </h4>
+              </h3>
               <p className="text-sm text-gray-500">{item.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* 📢 CTA */}
-      <div className="px-12 py-16 text-center">
-        <h3 className="text-2xl font-semibold mb-4">
-          Ready to get started?
-        </h3>
-
-        {
-          user.accessToken ? "" :
-            <Button
-              onClick={() => navigate("/register")}
-              className="px-8 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white"
-            >
-              Create Account →
-            </Button>
-        }
-
-      </div>
 
       {/* 🔻 FOOTER */}
-      <div className="text-center text-sm text-gray-400 pb-6">
+      <div className="text-center text-xs sm:text-sm text-gray-400 py-6">
         © 2026 MaaN. All rights reserved.
       </div>
     </div>

@@ -1,3 +1,4 @@
+
 // pages/ResetPassword.tsx
 import { useForm } from "react-hook-form";
 import Card from "../../compponents/Card";
@@ -13,73 +14,80 @@ type FormData = {
 
 export default function ResetPassword() {
 
-  const {register,handleSubmit,watch,formState: { errors }} = useForm<FormData>();
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>();
+  const { mutate, isPending } = useResetPassword();
 
-  const {mutate , isPending} = useResetPassword()
-
-  
-  const onSubmit = async(data: FormData) => {
-    mutate(data)
-    // await resetPasswordService({password : data.password} , navigate)
+  const onSubmit = async (data: FormData) => {
+    mutate(data);
   };
 
   return (
-    <div className="min-h-screen grid grid-cols-2">
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
 
-      {/* LEFT SIDE */}
-      <ResetPasswordBanner />
+      {/* LEFT SIDE (hidden on mobile) */}
+      <div className="hidden lg:flex">
+        <ResetPasswordBanner />
+      </div>
 
       {/* RIGHT SIDE */}
-      <div className="flex items-center justify-center">
-        <Card>
-          <h2 className="text-lg font-semibold text-center mb-2">
-            Reset Password
-          </h2>
+      <div className="flex justify-center w-full min-h-screen px-4 sm:px-6 md:px-8">
 
-          <p className="text-center text-sm text-gray-500 mb-4">
-            Enter your new password below
-          </p>
+        <div className="w-full max-w-md mx-auto flex items-center">
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <div className="w-full">
+            <Card>
 
-            <Input
-              label="New Password"
-              type="password"
-              placeholder="Enter new password"
-              {...register("password", {
-                required: { value: true, message: "password is required !" },
-                pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[^\s]{6,}$/, message: 'Password must be at least 6 characters and include uppercase, lowercase, number, and special character !' }
-              })}
-              error={errors.password}
-            />
+              <h2 className="text-lg sm:text-xl font-semibold text-center mb-2">
+                Reset Password
+              </h2>
 
-            <Input
-              label="Confirm Password"
-              type="password"
-              placeholder="Confirm new password"
-              {...register("confirmPassword", {
-                required: { value: true, message: "Confirm password is required !" },
-                validate: (value) => value === watch('password') || "Password must be match !"
-              })}
-              error={errors.confirmPassword}
-            />
-{/* 
-            <Button type="submit" className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium hover:opacity-90">
-              Update Password →
-            </Button> */}
+              <p className="text-center text-sm text-gray-500 mb-4">
+                Enter your new password below
+              </p>
 
-            <Button
-              type="submit"
-              isLoading={isPending}
-              loadingText="reseting..."
-              className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium disabled:opacity-60 flex items-center justify-center gap-2"
-            >
-              Update Passoword
-            </Button>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-          </form>
+                <Input
+                  label="New Password"
+                  type="password"
+                  placeholder="Enter new password"
+                  {...register("password", {
+                    required: { value: true, message: "Password is required !" },
+                    pattern: {
+                      value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[^\s]{6,}$/,
+                      message: "Strong password required!",
+                    },
+                  })}
+                  error={errors.password}
+                />
 
-        </Card>
+                <Input
+                  label="Confirm Password"
+                  type="password"
+                  placeholder="Confirm new password"
+                  {...register("confirmPassword", {
+                    required: { value: true, message: "Confirm password is required !" },
+                    validate: (value) =>
+                      value === watch("password") || "Password must match!",
+                  })}
+                  error={errors.confirmPassword}
+                />
+
+                <Button
+                  type="submit"
+                  isLoading={isPending}
+                  loadingText="Resetting..."
+                  className="w-full py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-500 text-white font-medium disabled:opacity-60 flex items-center justify-center gap-2"
+                >
+                  Update Password
+                </Button>
+
+              </form>
+
+            </Card>
+          </div>
+
+        </div>
       </div>
     </div>
   );

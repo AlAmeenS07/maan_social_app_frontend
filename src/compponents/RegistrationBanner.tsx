@@ -1,9 +1,11 @@
+
 import AvatarGroup from './AvatarGroup'
 
 const RegistrationBanner = () => {
     return (
-        <div className="bg-gradient-to-b from-purple-100 to-purple-200 p-12 flex items-center justify-center">
-            <div className="max-w-md text-center md:text-left">
+        <div className="min-h-screen w-full bg-gradient-to-b from-purple-100 to-purple-200 flex items-center justify-center p-8">
+
+            <div className="max-w-md text-center lg:text-left">
 
                 <h1 className="text-4xl font-bold leading-tight">
                     Join MaaN
@@ -18,8 +20,12 @@ const RegistrationBanner = () => {
                     without leaving your unique voice.
                 </p>
 
-                <AvatarGroup />
+                <div className="mt-6">
+                    <AvatarGroup />
+                </div>
+
             </div>
+
         </div>
     )
 }

@@ -1,27 +1,24 @@
 
 const LoginBanner = () => {
     return (
-        <div className="bg-gradient-to-b from-purple-100 to-purple-200 flex items-center justify-center p-12">
+        <div className="min-h-screen w-full bg-gradient-to-b from-purple-100 to-purple-200 flex items-center justify-center p-8">
+
             <div className="max-w-md">
 
-                {/* TAG */}
                 <p className="text-xs font-semibold text-purple-600 bg-purple-100 inline-block px-3 py-1 rounded-full">
                     WELCOME BACK
                 </p>
 
-                {/* TITLE */}
                 <h1 className="text-3xl font-bold mt-4 leading-snug">
                     Log in to your{" "}
                     <span className="text-purple-600">MaaN account</span>
                 </h1>
 
-                {/* DESCRIPTION */}
                 <p className="mt-4 text-gray-600 text-sm leading-relaxed">
                     Access your MaaN profile, connect with your audience,
                     and continue building your digital identity seamlessly.
                 </p>
 
-                {/* FEATURES */}
                 <div className="mt-8 space-y-4">
 
                     <div className="flex gap-3 items-start">
@@ -49,6 +46,7 @@ const LoginBanner = () => {
                     </div>
 
                 </div>
+
             </div>
         </div>
     )
