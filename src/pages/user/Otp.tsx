@@ -95,7 +95,9 @@ export default function Otp() {
                 {otp.map((digit, i) => (
                   <input
                     key={i}
-                    ref={(el: any) => (inputs.current[i] = el)}
+                    ref={(el) => {
+                      inputs.current[i] = el;
+                    }}
                     value={digit}
                     maxLength={1}
                     onChange={(e) => handleChange(e.target.value, i, setOtp, otp, inputs)}

@@ -14,7 +14,7 @@ type FormData = {
 
 export default function ResetPassword() {
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<FormData>();
+  const { register, handleSubmit, getValues, formState: { errors } } = useForm<FormData>();
   const { mutate, isPending } = useResetPassword();
 
   const onSubmit = async (data: FormData) => {
@@ -68,7 +68,7 @@ export default function ResetPassword() {
                   {...register("confirmPassword", {
                     required: { value: true, message: "Confirm password is required !" },
                     validate: (value) =>
-                      value === watch("password") || "Password must match!",
+                      value === getValues("password") || "Password must match!",
                   })}
                   error={errors.confirmPassword}
                 />

@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { adminLogoutApi } from "../../../api/admin/admin.auth.api";
 import { logout } from "../../../store/slices/user.slice";
 import { queryKeys } from "../../../utils/query.keys";
+import { commonErrorHandler } from "../../../utils/commonErrorHandler";
 
 export const useAdminLogout = () => {
   const navigate = useNavigate();
@@ -28,8 +29,8 @@ export const useAdminLogout = () => {
       }
     },
 
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || "Logout failed");
+    onError: (error) => {
+      commonErrorHandler(error)
     },
   });
 };

@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { adminUsersApi } from "../../../api/admin/admin.users.api";
 import { queryKeys } from "../../../utils/query.keys";
 
-export const useAdminUsers = (params: any) => {
+export const useAdminUsers = <T>(params: T) => {
   return useQuery({
     queryKey: queryKeys.adminUsers(params),
     queryFn: () => adminUsersApi(params)

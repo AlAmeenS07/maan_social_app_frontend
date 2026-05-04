@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../../store/slices/user.slice";
 import { queryKeys } from "../../../utils/query.keys";
+import { commonErrorHandler } from "../../../utils/commonErrorHandler";
 
 export const useVerifyOtp = () => {
   const navigate = useNavigate();
@@ -27,8 +28,8 @@ export const useVerifyOtp = () => {
       }
     },
 
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || "OTP verification failed");
+    onError: (error) => {
+      commonErrorHandler(error)
     },
   });
 };

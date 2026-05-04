@@ -4,8 +4,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { adminUserStatusApi } from "../../../api/admin/admin.users.api";
 import { queryKeys } from "../../../utils/query.keys";
+import { commonErrorHandler } from "../../../utils/commonErrorHandler";
 
-export const useAdminUsersStatus = (params: any) => {
+export const useAdminUsersStatus = <T>(params: T) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -19,8 +20,8 @@ export const useAdminUsersStatus = (params: any) => {
       }
     },
 
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || "Failed to update user");
+    onError: (error) => {
+      commonErrorHandler(error)
     },
   });
 };

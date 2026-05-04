@@ -1,8 +1,9 @@
 // components/layout/AdminLayout.jsx
+import type { ReactNode } from "react";
 import AdminHeader from "../compponents/AdminHeader";
 import AdminSidebar from "../compponents/AdminSideBar";
 
-export default function AdminLayout({ children } : any) {
+export default function AdminLayout({ children } : { children : ReactNode}) {
   return (
     <div className="flex">
       <AdminSidebar />

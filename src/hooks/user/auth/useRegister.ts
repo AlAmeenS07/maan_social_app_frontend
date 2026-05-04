@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { registerApi } from "../../../api/user/auth.api";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { commonErrorHandler } from "../../../utils/commonErrorHandler";
 
 export const useRegister = () => {
   const navigate = useNavigate();
@@ -22,8 +23,8 @@ export const useRegister = () => {
       }
     },
 
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || "Registration failed");
+    onError: (error) => {
+      commonErrorHandler(error)
     },
   });
 };

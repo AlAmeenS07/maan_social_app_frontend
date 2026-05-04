@@ -37,7 +37,7 @@ export default function Users() {
             page: String(page) || "1",
             limit: String(limit) || "10"
         });
-    }, [page, search, status, from, to, limit]);
+    }, [page, search, status, from, to, limit , setSearchParams]);
 
     async function changeStatus(id: string, status: boolean) {
         console.log("here-fun", id)

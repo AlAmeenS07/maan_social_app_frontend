@@ -19,7 +19,7 @@ export type RegisterFormData = {
 
 export default function Register() {
 
-    const { register, handleSubmit, watch, formState: { errors } } =useForm<RegisterFormData>();
+    const { register, handleSubmit, getValues, formState: { errors } } =useForm<RegisterFormData>();
 
     const { isPending, mutate } = useRegister();
 
@@ -144,7 +144,7 @@ export default function Register() {
                                         message: "Confirm password is required !",
                                     },
                                     validate: (value) =>
-                                        value === watch("password") ||
+                                        value === getValues("password") ||
                                         "Password must match!",
                                 })}
                                 error={errors.confirmPassword}

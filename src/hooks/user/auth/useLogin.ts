@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { loginApi } from "../../../api/user/auth.api";
 import { setUser } from "../../../store/slices/user.slice";
 import { queryKeys } from "../../../utils/query.keys";
+import { commonErrorHandler } from "../../../utils/commonErrorHandler";
 
 export const useLogin = () => {
   const navigate = useNavigate();
@@ -27,8 +28,8 @@ export const useLogin = () => {
       }
     },
 
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || "Login failed");
+    onError: (error) => {
+      commonErrorHandler(error)
     },
   });
 };

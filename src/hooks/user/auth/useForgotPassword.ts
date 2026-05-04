@@ -2,6 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { forgotPasswordApi } from "../../../api/user/auth.api";
+import { commonErrorHandler } from "../../../utils/commonErrorHandler";
 
 export const useForgotPassword = () => {
   const navigate = useNavigate();
@@ -17,8 +18,8 @@ export const useForgotPassword = () => {
       }
     },
 
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message);
+    onError: (error) => {
+      commonErrorHandler(error)
     },
   });
 };

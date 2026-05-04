@@ -3,6 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { resendOtpApi } from "../../../api/user/auth.api";
 import toast from "react-hot-toast";
+import { commonErrorHandler } from "../../../utils/commonErrorHandler";
 
 export const useResendOtp = () => {
   return useMutation({
@@ -16,8 +17,8 @@ export const useResendOtp = () => {
       }
     },
 
-    onError: (error: any) => {
-      toast.error(error?.response?.data?.message || "Failed to resend OTP");
+    onError: (error) => {
+      commonErrorHandler(error)
     },
   });
 };

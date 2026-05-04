@@ -48,7 +48,7 @@ function App() {
     if (!user.accessToken) {
       initAuth();
     }
-  }, [])
+  }, [dispatch])
 
   if (user.loading) {
     return (
@@ -62,10 +62,8 @@ function App() {
     <ErrorBoundary>
       <BrowserRouter>
         <Routes>
-          {/* Admin first (for readability, not required) */}
           <Route path="/admin/*" element={<AdminRoutes />} />
 
-          {/* User routes */}
           <Route path="/*" element={<UserRoutes />} />
         </Routes>
       </BrowserRouter>

@@ -2,5 +2,5 @@
 
 export const queryKeys = {
     user : ["user"],
-    adminUsers : (params : any) => ["adminUsers" , params]
+    adminUsers : <T>(params : T) => ["adminUsers" , params]
 }
