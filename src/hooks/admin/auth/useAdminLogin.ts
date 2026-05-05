@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { adminLoginApi } from "../../../api/admin/admin.auth.api";
 import { setUser } from "../../../store/slices/user.slice";
 import { queryKeys } from "../../../utils/query.keys";
+import { commonErrorHandler } from "../../../utils/commonErrorHandler";
 
 export const useAdminLogin = () => {
   const navigate = useNavigate();
@@ -28,17 +29,7 @@ export const useAdminLogin = () => {
     },
 
     onError: (error) => {
-      let message = "Admin login failed";
-
-      if (typeof error === "object" && error !== null && "response" in error) {
-        const err = error as {
-          response?: { data?: { message?: string } };
-        };
-
-        message = err.response?.data?.message || message;
-      }
-
-      toast.error(message);
+      commonErrorHandler(error)
     }
   });
 };
