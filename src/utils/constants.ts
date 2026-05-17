@@ -12,5 +12,10 @@ export const apis = {
     USER_AUTH_FORGOT_PASSWORD : "/user/auth/forgot-password",
     USER_AUTH_LOGOUT : "/user/auth/logout",
     USER_REFRESH_TOKEN : "/user/refresh-token",
-    USER_ME : "/user/me"
+    USER_ME : "/user/me",
+    USER_PROFILE_FETCH : "/user/profile/me",
+    USER_NAME_CHECK : "/user/profile/user-name/check",
+    IMAGE_UPLOAD : "/image/upload-url",
+    IMAGE_VIEW : "/image/view-url",
+    USER_PROFILE : "/user/profile"
 }

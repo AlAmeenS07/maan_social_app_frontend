@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { loadingEnd, loadingStart, logout, setUser, type AuthPayload } from "./store/slices/user.slice";
+import { loadingEnd, loadingStart, logout, setUser, setAuthChecked, type AuthPayload } from "./store/slices/user.slice";
 import { logoutApi, refreshTokenApi } from "./api/user/auth.api";
 import type { RootState } from "./store/store";
 
@@ -43,6 +43,7 @@ function App() {
         }
       } finally {
         dispatch(loadingEnd());
+        dispatch(setAuthChecked(true));
       }
     };
     if (!user.accessToken) {
