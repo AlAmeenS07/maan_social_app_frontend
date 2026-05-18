@@ -1,18 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import type { UserType } from "../store/slices/user.slice";
-import type { ProfileType } from "../types/user/user.profile";
+import type { ProfileLinkType, ProfileType } from "../types/user/user.profile";
 import { useImageView } from "../hooks/user/profile/useImageView";
+import React, { useState } from "react";
+import SocialLinksModification from "./SocialLinksModification";
 
 interface Props {
     user: UserType
     profile: ProfileType
+    profileLinks : ProfileLinkType[]
     onOpenLinks: () => void;
+    setSocialLinks : React.Dispatch<React.SetStateAction<ProfileLinkType[]>>
     editable?: boolean;
 }
 
-export default function ProfileHeader({ user, profile, onOpenLinks, editable = false }: Props) {
+export default function ProfileHeader({ user, profile, profileLinks, onOpenLinks, setSocialLinks, editable = false }: Props) {
 
     const navigate = useNavigate()
+
+    const [open, setOpen] = useState(false);
+    const [mode, setMode] = useState<"add" | "edit">("add");
 
     const { data: ProfileAvatar } = useImageView(profile?.avatar)
 
@@ -126,12 +133,20 @@ export default function ProfileHeader({ user, profile, onOpenLinks, editable = f
                         {editable && (
                             <>
                                 {/* ADD */}
-                                <button className="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 hover:bg-purple-200 transition flex items-center justify-center text-lg font-bold">
+                                <button className="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 hover:bg-purple-200 transition flex items-center justify-center text-lg font-bold"
+                                    onClick={()=> {
+                                        setOpen(true)
+                                        setMode("add")
+                                    }}>
                                     +
                                 </button>
 
                                 {/* EDIT */}
-                                <button className="w-8 h-8 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition flex items-center justify-center">
+                                <button className="w-8 h-8 rounded-lg bg-gray-100 text-gray-600 hover:bg-gray-200 transition flex items-center justify-center"
+                                    onClick={()=> {
+                                        setOpen(true)
+                                        setMode("edit")
+                                    }}>
                                     ✎
                                 </button>
                             </>
@@ -142,6 +157,16 @@ export default function ProfileHeader({ user, profile, onOpenLinks, editable = f
                 </div>
 
             </div>
+
+            {open && 
+                <SocialLinksModification
+                    open={open}
+                    mode={mode}
+                    initialData={profileLinks}
+                    setOpen={setOpen}
+                    setSocialLinks={setSocialLinks}
+                />
+            }
 
         </div>
     );

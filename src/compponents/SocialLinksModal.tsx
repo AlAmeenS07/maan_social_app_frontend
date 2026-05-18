@@ -44,21 +44,21 @@ export default function SocialLinksModal({open, onClose, links}: Props) {
 
                     {links.map((item) => (
                         <div
-                            key={item.id}
+                            key={item?.id}
                             className="flex items-center justify-between border rounded-xl px-4 py-3"
                         >
 
                             <div>
                                 <h3 className="font-semibold text-gray-800 capitalize">
-                                    {item.title}
+                                    {item?.title}
                                 </h3>
 
                                 <a
-                                    href={item.url}
+                                    href={item?.url}
                                     target="_blank"
                                     className="text-sm text-blue-600 hover:underline"
                                 >
-                                    {item.url}
+                                    {item?.url}
                                 </a>
                             </div>
 

@@ -10,13 +10,15 @@ export default function UserProfile() {
     const [openLinks, setOpenLinks] = useState(false);
 
     let { data, isLoading } = useProfileData();
-
     data = data?.data
 
+    const [socialLinks, setSocialLinks] = useState(data?.profile || [])
+
     useEffect(() => {
-
-    }, [])
-
+        if (data?.profileLinks) {
+            setSocialLinks(data.profileLinks);
+        }
+    }, [data]);
 
     if (isLoading) {
         return (
@@ -36,7 +38,9 @@ export default function UserProfile() {
                 <ProfileHeader
                     user={data?.user}
                     profile={data?.profile}
+                    profileLinks={socialLinks || []}
                     onOpenLinks={() => setOpenLinks(true)}
+                    setSocialLinks={setSocialLinks}
                     editable
                 />
 
@@ -46,7 +50,7 @@ export default function UserProfile() {
             </div>
 
             {/* SOCIAL LINKS MODAL */}
-            <SocialLinksModal open={openLinks} onClose={() => setOpenLinks(false)} links={data?.profileLinks || []} />
+            <SocialLinksModal open={openLinks} onClose={() => setOpenLinks(false)} links={socialLinks || []} />
 
         </UserLayout>
     );
