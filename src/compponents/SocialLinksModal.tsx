@@ -7,7 +7,7 @@ interface Props {
     links: ProfileLinkType[];
 }
 
-export default function SocialLinksModal({open, onClose, links}: Props) {
+export default function SocialLinksModal({ open, onClose, links }: Props) {
 
     if (!open) return null;
 
@@ -42,28 +42,30 @@ export default function SocialLinksModal({open, onClose, links}: Props) {
                 {/* LINKS */}
                 <div className="space-y-4">
 
-                    {links.map((item) => (
-                        <div
-                            key={item?.id}
-                            className="flex items-center justify-between border rounded-xl px-4 py-3"
-                        >
+                    {links?.length == 0 ? <p className="text-gray-600 text-sm">No links found !</p>
+                        :
+                        links?.map((item) => (
+                            <div
+                                key={item?.id}
+                                className="flex items-center justify-between border rounded-xl px-4 py-3"
+                            >
 
-                            <div>
-                                <h3 className="font-semibold text-gray-800 capitalize">
-                                    {item?.title}
-                                </h3>
+                                <div>
+                                    <h3 className="font-semibold text-gray-800 capitalize">
+                                        {item?.title}
+                                    </h3>
 
-                                <a
-                                    href={item?.url}
-                                    target="_blank"
-                                    className="text-sm text-blue-600 hover:underline"
-                                >
-                                    {item?.url}
-                                </a>
+                                    <a
+                                        href={item?.url}
+                                        target="_blank"
+                                        className="text-sm text-blue-600 hover:underline"
+                                    >
+                                        {item?.url}
+                                    </a>
+                                </div>
+
                             </div>
-
-                        </div>
-                    ))}
+                        ))}
 
                 </div>
 
