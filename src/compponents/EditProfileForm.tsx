@@ -1,7 +1,9 @@
+import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import type { EditProfileFormData, LocationType } from "../types/user/user.profile";
 
 type Props = {
-    register: any;
-    errors: any;
+    register: UseFormRegister<EditProfileFormData>;
+    errors: FieldErrors<EditProfileFormData>;
 
     locationRef: React.RefObject<HTMLDivElement | null>;
 
@@ -11,7 +13,7 @@ type Props = {
         value: boolean
     ) => void;
 
-    locationData: any[];
+    locationData: LocationType[];
 
     handleSelectLocation: (
         location: string
@@ -140,7 +142,7 @@ export default function EditProfileFields({ register, errors, locationRef, showL
 
                     <div className="absolute z-20 bg-white border rounded-xl shadow-lg mt-2 w-full max-h-60 overflow-y-auto">
 
-                        {locationData.map((item: any) => (
+                        {locationData.map((item: LocationType) => (
 
                             <div key={item.place_id}
                                 onClick={() => handleSelectLocation(item.display_name)}

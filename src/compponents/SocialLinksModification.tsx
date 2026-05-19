@@ -107,7 +107,7 @@ export const SocialLinksModification = ({ open, mode, initialData = [], setOpen,
                                     <button
                                         type="button"
                                         onClick={async() => {
-                                            await deleteProfileLink({linkId : field?.id as string})
+                                            await deleteProfileLink({linkId : field?.id as string, index})
                                         }}
                                         className="rounded-xl bg-red-100 px-3 py-3 text-red-600 hover:bg-red-200 transition"
                                     >

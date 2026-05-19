@@ -9,6 +9,7 @@ import Pagination from "../../compponents/pagination";
 import Swal from "sweetalert2";
 import { useAdminUsers } from "../../hooks/admin/users/useAdminUsers";
 import { useAdminUsersStatus } from "../../hooks/admin/users/useAdminUsersStatus";
+import { useDebounce } from "../../hooks/common/useDebounce";
 
 
 export default function Users() {
@@ -22,7 +23,9 @@ export default function Users() {
     const [to, setTo] = useState(searchParams.get("to") || "")
     const [limit, setLimit] = useState(searchParams.get("limit") || 10)
 
-    const { data, isLoading } = useAdminUsers({ search, status, from, to, page, limit })
+    const debouncedSearch = useDebounce(search, 300)
+
+    const { data, isLoading } = useAdminUsers({ search : debouncedSearch, status, from, to, page, limit })
     const { mutate: toggleStatusMutate } = useAdminUsersStatus({ search, status, from, to, page, limit })
 
     const users = data?.data?.users || []
@@ -30,14 +33,14 @@ export default function Users() {
 
     useEffect(() => {
         setSearchParams({
-            search: search || "",
+            search: debouncedSearch || "",
             status: status || "",
             from: from || "",
             to: to || "",
             page: String(page) || "1",
             limit: String(limit) || "10"
         });
-    }, [page, search, status, from, to, limit , setSearchParams]);
+    }, [page, debouncedSearch, status, from, to, limit , setSearchParams]);
 
     async function changeStatus(id: string, status: boolean) {
         console.log("here-fun", id)

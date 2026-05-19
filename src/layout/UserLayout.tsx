@@ -1,6 +1,6 @@
 // // layouts/MainLayout.tsx
 
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { type ReactNode, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import { useLogout } from "../hooks/user/auth/useLogout";
 import { useSelector } from "react-redux";
