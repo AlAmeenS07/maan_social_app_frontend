@@ -6,6 +6,7 @@ import AdminLogin from "../pages/admin/AdminLogin";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AdminUsers from "../pages/admin/AdminUsers";
 import AdminPosts from "../pages/admin/AdminPosts";
+import AdminUserDetail from "../pages/admin/AdminUserDetail";
 
 function AdminRoutes() {
   const user = useSelector((state: RootState) => state.user);
@@ -23,6 +24,8 @@ function AdminRoutes() {
       <Route path="dashboard" element={isAdmin ? <AdminDashboard /> : <Navigate to="/admin/login" />} />
 
       <Route path="users" element={isAdmin ? <AdminUsers /> : <Navigate to="/admin/login" />} />
+
+      <Route path="users/:id" element={isAdmin ? <AdminUserDetail /> : <Navigate to="/admin/login" />} />
 
       <Route path="posts" element={isAdmin ? <AdminPosts /> : <Navigate to="/admin/login" />} />
     </Routes>

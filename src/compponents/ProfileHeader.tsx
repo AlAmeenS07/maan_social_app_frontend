@@ -10,7 +10,7 @@ interface Props {
     profile: ProfileType
     profileLinks : ProfileLinkType[]
     onOpenLinks: () => void;
-    setSocialLinks : React.Dispatch<React.SetStateAction<ProfileLinkType[]>>
+    setSocialLinks?: React.Dispatch<React.SetStateAction<ProfileLinkType[]>>
     editable?: boolean;
 }
 
@@ -68,7 +68,9 @@ export default function ProfileHeader({ user, profile, profileLinks, onOpenLinks
 
                         {editable && (
                             <button className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-xl text-sm font-medium transition"
-                                onClick={() => navigate(`/profile/${user?.id}`)}>
+                                onClick={() => {
+                                    navigate(`/profile/${user?.id}`)
+                                }}>
                                 Edit Profile
                             </button>
                         )}
@@ -158,7 +160,7 @@ export default function ProfileHeader({ user, profile, profileLinks, onOpenLinks
 
             </div>
 
-            {open && 
+            {open && setSocialLinks &&  
                 <SocialLinksModification
                     open={open}
                     mode={mode}

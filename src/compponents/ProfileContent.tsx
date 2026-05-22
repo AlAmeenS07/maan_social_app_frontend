@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function ProfileContent() {
+export default function ProfileContent({ user = true }) {
 
     const [activeTab, setActiveTab] =
         useState("posts");
@@ -14,26 +14,26 @@ export default function ProfileContent() {
                 <button
                     onClick={() => setActiveTab("posts")}
                     className={`pb-3 text-sm font-semibold border-b-2 transition
-                    ${
-                        activeTab === "posts"
+                    ${activeTab === "posts"
                             ? "border-purple-600 text-purple-600"
                             : "border-transparent text-gray-500"
-                    }`}
+                        }`}
                 >
                     POSTS
                 </button>
 
-                <button
-                    onClick={() => setActiveTab("saved")}
-                    className={`pb-3 text-sm font-semibold border-b-2 transition
-                    ${
-                        activeTab === "saved"
-                            ? "border-purple-600 text-purple-600"
-                            : "border-transparent text-gray-500"
-                    }`}
-                >
-                    SAVED
-                </button>
+                {user &&
+                    <button
+                        onClick={() => setActiveTab("saved")}
+                        className={`pb-3 text-sm font-semibold border-b-2 transition
+                    ${activeTab === "saved"
+                                ? "border-purple-600 text-purple-600"
+                                : "border-transparent text-gray-500"
+                            }`}
+                    >
+                        SAVED
+                    </button>
+                }
 
             </div>
 

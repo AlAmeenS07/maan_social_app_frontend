@@ -1,5 +1,7 @@
 // components/user/UserTable.jsx
 
+import { useNavigate } from "react-router-dom";
+
 
 type TableUser = {
   id: string;
@@ -11,6 +13,8 @@ type TableUser = {
 };
 
 export default function UserTable({users , changeStatus} : {users : TableUser[] , changeStatus : (id : string , status : boolean)=> void}) {
+
+    const navigate = useNavigate()
 
 
     return (
@@ -46,7 +50,7 @@ export default function UserTable({users , changeStatus} : {users : TableUser[] 
                             {/* STATUS */}
                             <td className="p-3">
                                 <span
-                                    onClick={()=> changeStatus(user.id , user.is_blocked)}
+                                    onClick={()=> changeStatus(user?.id , user.is_blocked)}
                                     className={`px-2 py-1 text-xs cursor-pointer rounded ${!user.is_blocked
                                             ? "bg-green-100 text-green-600"
                                             : "bg-red-100 text-red-500"
@@ -58,7 +62,10 @@ export default function UserTable({users , changeStatus} : {users : TableUser[] 
 
                             {/* ACTIONS */}
                             <td className="p-3 flex items-center gap-2">
-                                <button className="text-sm border px-2 py-1 rounded">
+                                <button className="text-sm border px-2 py-1 rounded"
+                                    onClick={() => {
+                                        navigate(`/admin/users/${user?.id}`)
+                                    }}>
                                     View Details
                                 </button>
 
