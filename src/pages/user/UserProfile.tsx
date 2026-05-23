@@ -9,8 +9,8 @@ export default function UserProfile() {
 
     const [openLinks, setOpenLinks] = useState(false);
 
-    let { data, isLoading } = useProfileData();
-    data = data?.data
+    const { data : response, isLoading } = useProfileData();
+    const data = response?.data
 
     const [socialLinks, setSocialLinks] = useState(data?.profile || [])
 

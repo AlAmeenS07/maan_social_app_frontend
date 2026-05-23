@@ -5,6 +5,7 @@ import SocialLinksModal from "../../compponents/SocialLinksModal";
 import ProfileContent from "../../compponents/ProfileContent";
 import { useParams } from "react-router-dom";
 import { useAdminUserDetail } from "../../hooks/admin/users/useAdminUserDetial";
+import type { ProfileLinkType } from "../../types/user/user.profile";
 
 export default function AdminUserDetail() {
 
@@ -12,20 +13,20 @@ export default function AdminUserDetail() {
 
     const { id } = useParams()
 
-    const { data: response, isPending } = useAdminUserDetail(id as string)
+    const { data: response } = useAdminUserDetail(id as string)
 
     const data = response?.data
 
     console.log("data" , data)
 
-    const [socialLinks, setSocialLinks] = useState<any[]>([]);
+    const [socialLinks, setSocialLinks] = useState<ProfileLinkType[]>([]);
     
 
     useEffect(() => {
         if (data?.profileLinks) {
             setSocialLinks(data.profileLinks);
         }
-    }, []);
+    }, [data?.profileLinks]);
 
     return (
         <AdminLayout>
