@@ -13,3 +13,8 @@ export const adminUserStatusApi = async(id : string) => {
     const res = await axiosInstance.patch(baseUrl + apis.ADMIN_USERS + `/${id}`)
     return res.data
 }
+
+export const fetchUserApi = async(id: string) => {
+    const res = await axiosInstance.get(baseUrl + apis.ADMIN_USERS + `/${id}`)
+    return res.data
+}

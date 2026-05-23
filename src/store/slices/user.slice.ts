@@ -1,17 +1,21 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-type UserType = {
+export type UserType = {
   id: string;
   name: string;
   user_name: string;
   email: string;
+  is_blocked: boolean;
+  is_verified: boolean;
   is_admin: boolean;
+  createdAt: string;
 };
 
 export interface UserState {
   user: UserType | null;
   accessToken: string | null;
   loading: boolean;
+  authChecked: boolean
 }
 
 export type AuthPayload = {
@@ -23,6 +27,7 @@ const initialState: UserState = {
   user: null,
   accessToken: null,
   loading: false,
+  authChecked: false,
 };
 
 const authSlice = createSlice({
@@ -45,8 +50,11 @@ const authSlice = createSlice({
     loadingEnd: (state) => {
       state.loading = false;
     },
-  },
+    setAuthChecked: (state, action) => {
+      state.authChecked = action.payload;
+    },
+  }
 });
 
-export const { setUser, logout, loadingStart, loadingEnd } = authSlice.actions;
+export const { setUser, logout, loadingStart, loadingEnd , setAuthChecked } = authSlice.actions;
 export default authSlice.reducer;

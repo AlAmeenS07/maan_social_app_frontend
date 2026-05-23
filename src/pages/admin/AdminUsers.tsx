@@ -9,6 +9,8 @@ import Pagination from "../../compponents/pagination";
 import Swal from "sweetalert2";
 import { useAdminUsers } from "../../hooks/admin/users/useAdminUsers";
 import { useAdminUsersStatus } from "../../hooks/admin/users/useAdminUsersStatus";
+import { useDebounce } from "../../hooks/common/useDebounce";
+import type { UserType } from "../../store/slices/user.slice";
 
 
 export default function Users() {
@@ -22,22 +24,32 @@ export default function Users() {
     const [to, setTo] = useState(searchParams.get("to") || "")
     const [limit, setLimit] = useState(searchParams.get("limit") || 10)
 
-    const { data, isLoading } = useAdminUsers({ search, status, from, to, page, limit })
+    const debouncedSearch = useDebounce(search, 300)
+
+    const { data: response, isLoading } = useAdminUsers({ search: debouncedSearch, status, from, to, page, limit })
     const { mutate: toggleStatusMutate } = useAdminUsersStatus({ search, status, from, to, page, limit })
 
-    const users = data?.data?.users || []
-    const totalPages = data?.data?.totalPages || 0
+
+    const [userData, setUserData] = useState<UserType[]>([]);
+
+    useEffect(() => {
+        if (response?.data?.users && userData.length === 0) {
+            setUserData(response.data.users);
+        }
+    }, [response, userData.length]);
+
+    const totalPages = response?.data?.totalPages || 0
 
     useEffect(() => {
         setSearchParams({
-            search: search || "",
+            search: debouncedSearch || "",
             status: status || "",
             from: from || "",
             to: to || "",
             page: String(page) || "1",
             limit: String(limit) || "10"
         });
-    }, [page, search, status, from, to, limit , setSearchParams]);
+    }, [page, debouncedSearch, status, from, to, limit, setSearchParams]);
 
     async function changeStatus(id: string, status: boolean) {
         console.log("here-fun", id)
@@ -52,7 +64,20 @@ export default function Users() {
             cancelButtonText: "Cancel",
         })
         if (result.isConfirmed) {
-            toggleStatusMutate(id)
+            await toggleStatusMutate(id)
+            setUserData((prev) => {
+                return prev.map((p: UserType) => {
+
+                    if (p.id === id) {
+                        return {
+                            ...p,
+                            is_blocked: !p.is_blocked
+                        };
+                    }
+
+                    return p;
+                });
+            });
         }
     }
 
@@ -140,7 +165,7 @@ export default function Users() {
 
                 </div>
                 {/* TABLE */}
-                <UserTable users={users} changeStatus={changeStatus} />
+                <UserTable users={userData} changeStatus={changeStatus} />
 
                 {/* PAGINATION */}
                 {

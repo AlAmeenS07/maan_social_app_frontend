@@ -1,106 +1,102 @@
+import UserLayout from "../../layout/UserLayout";
 
-// pages/Home.tsx
-import Swal from "sweetalert2";
-import { useLogout } from "../../hooks/user/auth/useLogout";
 
 export default function Home() {
-  const { mutate } = useLogout();
-
-  async function logout() {
-    const result = await Swal.fire({
-      title: "Logout?",
-      text: "You will be signed out.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#ef4444",
-      cancelButtonText: "Cancel",
-    });
-
-    if (result.isConfirmed) mutate();
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50">
+    <UserLayout>
 
-      {/* 🔝 NAVBAR */}
-      <div className="flex justify-between items-center px-4 sm:px-6 md:px-10 py-4 bg-white shadow-sm">
-        <h1 className="text-lg sm:text-xl font-bold text-purple-600">MaaN</h1>
+      {/* CREATE POST */}
+      <div className="bg-white rounded-2xl border p-4 md:p-5">
 
-          <button
-            onClick={logout}
-            className="text-red-600 border border-red-500 px-3 py-1 rounded-md hover:bg-red-50 text-sm"
-          >
-            Logout
-          </button>
-      </div>
+        <div className="flex gap-4">
+          <img
+            src="https://i.pravatar.cc/100"
+            alt=""
+            className="w-11 h-11 rounded-full"
+          />
 
-      {/* 🚀 HERO */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 items-center px-4 sm:px-6 md:px-10 lg:px-16 py-16 gap-10">
-
-        {/* LEFT */}
-        <div className="text-center lg:text-left">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
-            Build your <span className="text-purple-600">identity</span>  
-            <br />
-            beyond social media
-          </h1>
-
-          <p className="mt-4 text-gray-600 text-sm sm:text-base">
-            MaaN is a next-generation platform where you can create,
-            connect, and monetize your digital presence — all in one place.
-          </p>
+          <input
+            type="text"
+            placeholder="What's on your mind?"
+            className="flex-1 bg-gray-100 rounded-xl px-4 outline-none text-sm"
+          />
         </div>
 
-        {/* RIGHT VISUAL */}
-        <div className="flex justify-center">
-          <div className="relative">
-            <div className="w-64 h-64 sm:w-80 sm:h-80 bg-gradient-to-r from-purple-400 to-indigo-500 rounded-3xl blur-2xl opacity-70"></div>
-            <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-xl">
+        <div className="flex justify-between items-center mt-5">
+
+          <div className="flex gap-5 text-sm text-gray-500">
+            <button>📷 Photo</button>
+            <button>😊 Feeling</button>
+          </div>
+
+          <button className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-lg text-sm">
+            Post
+          </button>
+        </div>
+      </div>
+
+      {/* POSTS */}
+      <div className="space-y-6 mt-6">
+
+        {[1, 2].map((post) => (
+          <div
+            key={post}
+            className="bg-white rounded-2xl border p-4 md:p-5"
+          >
+
+            {/* HEADER */}
+            <div className="flex justify-between">
+
+              <div className="flex gap-3">
+                <img
+                  src={`https://i.pravatar.cc/150?img=${post + 10}`}
+                  alt=""
+                  className="w-11 h-11 rounded-full"
+                />
+
+                <div>
+                  <h3 className="font-semibold text-sm">
+                    {post === 1
+                      ? "Sarah Jenkins"
+                      : "Marcus Johnson"}
+                  </h3>
+
+                  <p className="text-xs text-gray-500">
+                    2h ago
+                  </p>
+                </div>
+              </div>
+
+              <button className="text-gray-400">
+                •••
+              </button>
+            </div>
+
+            {/* CONTENT */}
+            <p className="text-sm text-gray-600 mt-4 leading-6">
+              {post === 1
+                ? "Just finished setting up my new workspace! The natural light here is amazing."
+                : "Exploring the latest updates in the MaaN creator dashboard."}
+            </p>
+
+            {/* IMAGE */}
+            {post === 1 && (
+              <img
+                src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?q=80&w=1200&auto=format&fit=crop"
+                alt=""
+                className="rounded-2xl mt-4 w-full h-[220px] md:h-[350px] object-cover"
+              />
+            )}
+
+            {/* ACTIONS */}
+            <div className="flex gap-6 mt-5 text-sm text-gray-500">
+              <button>♡ 124</button>
+              <button>💬 18</button>
+              <button>↗ Share</button>
             </div>
           </div>
-        </div>
+        ))}
       </div>
-
-      {/* 🌟 FEATURES */}
-      <div className="px-4 sm:px-6 md:px-10 lg:px-16 py-16 bg-white">
-        <h2 className="text-xl sm:text-2xl font-semibold text-center mb-10">
-          Why MaaN?
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-
-          {[
-            {
-              title: "Unified Identity",
-              desc: "Create a single powerful profile across platforms.",
-            },
-            {
-              title: "Smart Connections",
-              desc: "Connect with people that actually matter.",
-            },
-            {
-              title: "Monetization Ready",
-              desc: "Turn your presence into opportunities.",
-            },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="bg-gray-50 p-6 rounded-xl hover:shadow-md transition"
-            >
-              <h3 className="font-semibold text-purple-600 mb-2">
-                {item.title}
-              </h3>
-              <p className="text-sm text-gray-500">{item.desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-
-      {/* 🔻 FOOTER */}
-      <div className="text-center text-xs sm:text-sm text-gray-400 py-6">
-        © 2026 MaaN. All rights reserved.
-      </div>
-    </div>
+    </UserLayout>
   );
 }
