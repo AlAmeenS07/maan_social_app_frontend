@@ -20,7 +20,7 @@ type Props = {
     ) => void;
 };
 
-export default function EditProfileFields({ register, errors, locationRef, showLocations, setShowLocations, locationData,  handleSelectLocation}: Props) {
+export default function EditProfileFields({ register, errors, locationRef, showLocations, setShowLocations, locationData, handleSelectLocation }: Props) {
 
     return (
 
@@ -31,18 +31,18 @@ export default function EditProfileFields({ register, errors, locationRef, showL
 
                 <div>
 
-                    <label className="text-sm font-medium text-gray-700"> 
-                        Name 
+                    <label className="text-sm font-medium text-gray-700">
+                        Name
                     </label>
 
                     <input
-                        {...register("name", {required: "Name is required", setValueAs: (value : string) => value.trim(), minLength: { value: 2, message: "Name must be minimum 2 letters!" }})}
+                        {...register("name", { required: "Name is required", setValueAs: (value: string) => value.trim(), minLength: { value: 2, message: "Name must be minimum 2 letters!" } })}
                         type="text"
                         placeholder="Al Ameen"
                         className="w-full mt-2 border rounded-xl px-4 py-3 outline-none focus:border-purple-500"
                     />
 
-                    {errors.name && ( <p className="text-red-500 text-sm mt-1">{errors.name.message} </p>)}
+                    {errors.name && (<p className="text-red-500 text-sm mt-1">{errors.name.message} </p>)}
 
                 </div>
 
@@ -53,7 +53,14 @@ export default function EditProfileFields({ register, errors, locationRef, showL
                     </label>
 
                     <input
-                        {...register("user_name", {required: "Username is required", setValueAs: (value : string) => value.trim(), minLength: { value: 3, message: "Username must be minimum 3 letters!" }})}
+                        {...register("user_name", {
+                            required: "Username is required", setValueAs: (value: string) => value.trim(), minLength: { value: 3, message: "Username must be minimum 3 letters!" },
+                            pattern: {
+                                value: /^@?[a-zA-Z0-9._]+$/,
+                                message:
+                                    "Username can only contain letters, numbers, ., _ and optional leading @"
+                            }},
+                        )}
                         type="text"
                         placeholder="@alameen"
                         className="w-full mt-2 border rounded-xl px-4 py-3 outline-none focus:border-purple-500"
@@ -75,7 +82,7 @@ export default function EditProfileFields({ register, errors, locationRef, showL
                     </label>
 
                     <select
-                        {...register("gender", {required: "Gender is required"})}
+                        {...register("gender", { required: "Gender is required" })}
                         className="w-full mt-2 border rounded-xl px-4 py-3 outline-none focus:border-purple-500"
                     >
 
@@ -108,7 +115,8 @@ export default function EditProfileFields({ register, errors, locationRef, showL
                     </label>
 
                     <input
-                        type="date" {...register("dob", {required: "DOB is required", validate: (value: string) => {
+                        type="date" {...register("dob", {
+                            required: "DOB is required", validate: (value: string) => {
                                 const date = new Date(value);
                                 return (date < new Date()) || "DOB must be a valid date in the past";
                             }
@@ -131,7 +139,7 @@ export default function EditProfileFields({ register, errors, locationRef, showL
                 </label>
 
                 <input
-                    {...register("location", { setValueAs: (value : string) => value.trim()})}
+                    {...register("location", { setValueAs: (value: string) => value.trim() })}
                     type="text"
                     placeholder="Kochi, Kerala, India"
                     onFocus={() => setShowLocations(true)}
@@ -166,13 +174,13 @@ export default function EditProfileFields({ register, errors, locationRef, showL
                 </label>
 
                 <input
-                    {...register("bioHead", { setValueAs: (value  : string) => value.trim(), maxLength: { value: 50, message: "Bio heading must be below 50 characters!" }})}
+                    {...register("bioHead", { setValueAs: (value: string) => value.trim(), maxLength: { value: 50, message: "Bio heading must be below 50 characters!" } })}
                     type="text"
                     placeholder="Software Engineer"
                     className="w-full mt-2 border rounded-xl px-4 py-3 outline-none focus:border-purple-500"
                 />
 
-                {errors.bioHead && (<p className="text-red-500 text-sm mt-1">{errors.bioHead.message} </p> )}
+                {errors.bioHead && (<p className="text-red-500 text-sm mt-1">{errors.bioHead.message} </p>)}
 
             </div>
 
@@ -184,7 +192,7 @@ export default function EditProfileFields({ register, errors, locationRef, showL
                 </label>
 
                 <textarea
-                    {...register("bioText", {setValueAs: (value  : string) => value.trim(), maxLength: {value: 250, message: "Bio must be below 250 characters!" }})}
+                    {...register("bioText", { setValueAs: (value: string) => value.trim(), maxLength: { value: 250, message: "Bio must be below 250 characters!" } })}
                     rows={5}
                     placeholder="Tell something about yourself..."
                     className="w-full mt-2 border rounded-xl px-4 py-3 outline-none focus:border-purple-500 resize-none"
