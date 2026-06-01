@@ -6,7 +6,7 @@ export default function Home() {
     <UserLayout>
 
       {/* CREATE POST */}
-      <div className="bg-white rounded-2xl border p-4 md:p-5">
+      {/* <div className="bg-white rounded-2xl border p-4 md:p-5">
 
         <div className="flex gap-4">
           <img
@@ -18,7 +18,7 @@ export default function Home() {
           <input
             type="text"
             placeholder="What's on your mind?"
-            className="flex-1 bg-gray-100 rounded-xl px-4 outline-none text-sm"
+            className="flex-1 bg-gray-100 rounded-xl p-4 px-4 outline-none text-sm"
           />
         </div>
 
@@ -33,10 +33,10 @@ export default function Home() {
             Post
           </button>
         </div>
-      </div>
+      </div> */}
 
       {/* POSTS */}
-      <div className="space-y-6 mt-6">
+      <div className="space-y-6 mt-1">
 
         {[1, 2].map((post) => (
           <div

@@ -45,7 +45,7 @@ export default function UserProfile() {
                 />
 
                 {/* TABS */} {/* POSTS */}
-                <ProfileContent />
+                <ProfileContent user={true} userData={data?.user} profile={data?.profile}/>
 
             </div>
 

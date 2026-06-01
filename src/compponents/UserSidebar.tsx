@@ -1,21 +1,25 @@
+import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import PostModal from "./PostModal";
 
 interface Props {
     mobile?: boolean;
     onClose?: () => void;
 }
 
-export default function UserSidebar({ mobile = false, onClose}: Props) {
+export default function UserSidebar({ mobile = false, onClose }: Props) {
 
     const navigate = useNavigate();
     const location = useLocation();
+
+    const [showCreatePost, setShowCreatePost] = useState(false);
 
     const menus = [
         { text: "Home", path: "/" },
         { text: "Explore", path: "/explore" },
         { text: "Messages", path: "/messages" },
         { text: "Notifications", path: "/notifications" },
-        { text: "Profile" , path : "/profile"}
+        { text: "Profile", path: "/profile" }
     ];
 
     return (
@@ -82,10 +86,25 @@ export default function UserSidebar({ mobile = false, onClose}: Props) {
             </div>
 
             {/* CREATE BUTTON */}
-            <button className="mt-10 bg-purple-600 hover:bg-purple-700 transition text-white py-3 rounded-xl font-medium w-full">
+            <button className="mt-10 bg-purple-600 hover:bg-purple-700 transition text-white py-3 rounded-xl font-medium w-full"
+                onClick={() => {
+                    setShowCreatePost(true)
+                }}>
                 + Create Post
             </button>
+
+
+            {showCreatePost &&
+                <PostModal
+                    editData={null}
+                    open={showCreatePost}
+                    onClose={() =>
+                        setShowCreatePost(false)
+                    }
+                />
+            }
 
         </aside>
     );
 }
+

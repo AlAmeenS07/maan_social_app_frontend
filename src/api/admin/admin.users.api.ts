@@ -8,7 +8,6 @@ export const adminUsersApi = async<T>(params : T) => {
     return res.data
 }
 
-
 export const adminUserStatusApi = async(id : string) => {
     const res = await axiosInstance.patch(baseUrl + apis.ADMIN_USERS + `/${id}`)
     return res.data

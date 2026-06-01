@@ -5,7 +5,7 @@ import { refreshTokenApi } from "../api/user/auth.api";
 import type { RefreshApiPayload } from "../App";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000", 
+  baseURL: "http://localhost:5005", 
   withCredentials: true,
 });
 

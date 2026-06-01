@@ -33,7 +33,7 @@ export default function Users() {
     const [userData, setUserData] = useState<UserType[]>([]);
 
     useEffect(() => {
-        if (response?.data?.users && userData.length === 0) {
+        if (response?.data?.users) {
             setUserData(response.data.users);
         }
     }, [response, userData.length]);

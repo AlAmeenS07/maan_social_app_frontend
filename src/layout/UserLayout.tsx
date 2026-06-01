@@ -8,6 +8,7 @@ import type { RootState } from "../store/store";
 import { useNavigate } from "react-router-dom";
 import UserSidebar from "../compponents/UserSidebar";
 import { useClickOutside } from "../hooks/common/useClickOutside";
+import RightSection from "../compponents/RightSection";
 
 interface Props {
     children: ReactNode;
@@ -23,18 +24,18 @@ export default function UserLayout({ children }: Props) {
 
     const user = useSelector((store: RootState) => store.user.user)
 
-    const replaced = location.pathname.replace("/" , "")
+    const replaced = location.pathname.replace("/", "")
 
     const pageTitle = location.pathname === "/" ? "Home"
-            : location.pathname
-                .replace("/", "")
-                .charAt(0)
-                .toUpperCase() +
-            location.pathname
-                .replace("/", "")
-                .slice(1 , replaced.includes("/") ? replaced.indexOf("/") : replaced.length);
+        : location.pathname
+            .replace("/", "")
+            .charAt(0)
+            .toUpperCase() +
+        location.pathname
+            .replace("/", "")
+            .slice(1, replaced.includes("/") ? replaced.indexOf("/") : replaced.length);
 
-    useClickOutside(dropdownRef, setOpen);
+    useClickOutside(dropdownRef, () => setOpen(false));
 
     async function logout() {
         const result = await Swal.fire({
@@ -53,8 +54,8 @@ export default function UserLayout({ children }: Props) {
     }
 
     return (
-        <div className="min-h-screen bg-[#f5f5f7] flex flex-col">
 
+        <div className="h-screen bg-[#f5f5f7] flex overflow-hidden">
             {/* MAIN */}
             <div className="flex flex-1">
 
@@ -62,10 +63,9 @@ export default function UserLayout({ children }: Props) {
                 <UserSidebar />
 
                 {/* CONTENT */}
-                <main className="flex-1 flex flex-col">
-
+                <main className="flex-1 flex flex-col overflow-hidden">
                     {/* TOPBAR */}
-                    <div className="bg-white border-b px-4 md:px-8 py-4 flex justify-between items-center">
+                    <div className="sticky top-0 z-50 bg-white border-b px-4 md:px-8 py-4 flex justify-between items-center">
 
                         <div className="flex items-center gap-3">
 
@@ -124,11 +124,25 @@ export default function UserLayout({ children }: Props) {
                         </div>
                     </div>
 
-                    {/* PAGE CONTENT */}
-                    <div className="p-4 md:p-8">
-                        {children}
+                    {/* PAGE CONTENT + RIGHT SIDEBAR */}
+                    <div className="flex-1 overflow-y-auto">
+
+                        <div className="flex gap-16 p-4 md:p-8 justify-center">
+
+                            <div className="w-[780px] flex-shrink-0">
+                                {children}
+                            </div>
+
+                            <div className="sticky top-6 self-start">
+                                <RightSection />
+                            </div>
+
+                        </div>
+
                     </div>
+
                 </main>
+
             </div>
 
             {/* MOBILE SIDEBAR */}
@@ -149,3 +163,5 @@ export default function UserLayout({ children }: Props) {
         </div>
     );
 }
+
+

@@ -19,4 +19,6 @@ export const apis = {
     IMAGE_VIEW : "/image/view-url",
     USER_PROFILE : "/user/profile",
     USER_PROFILE_LINK : "/user/profile/links",
+    USER_POST : "/user/post",
+    ADMIN_POST : "/admin/post"
 }

@@ -1,20 +1,20 @@
 import { useEffect, useState } from "react";
-import { usePostData } from "../hooks/user/post/usePostData";
 import { getPublicImageUrl } from "../helpers/media.helper";
 import type { UserType } from "../store/slices/user.slice";
 import { useImageView } from "../hooks/user/profile/useImageView";
 import type { ProfileType } from "../types/user/user.profile";
 import PostListing from "./PostListing";
+import { useAdminUserPosts } from "../hooks/admin/post/useAdminUserPosts";
 import type { PostResponse } from "../types/user/user.post";
 
 
-export default function ProfileContent({ user = true, userData, profile }: { user: boolean, userData: UserType, profile: ProfileType }) {
+
+export default function AdminUsedrProfileContent({ id, userData, profile }: {id : string, userData: UserType, profile: ProfileType }) {
 
     const [posts, setPosts] = useState<PostResponse[]>([])
     const [openMenu, setOpenMenu] = useState<string | null>(null);
     
-    const { data: response } = usePostData()
-
+    const { data: response } = useAdminUserPosts(id)
 
     const { data: avatarUrl } = useImageView(profile?.avatar)
 
@@ -63,23 +63,10 @@ export default function ProfileContent({ user = true, userData, profile }: { use
                     POSTS
                 </button>
 
-                {user &&
-                    <button
-                        onClick={() => setActiveTab("saved")}
-                        className={`pb-3 text-sm font-semibold border-b-2 transition
-                    ${activeTab === "saved"
-                                ? "border-purple-600 text-purple-600"
-                                : "border-transparent text-gray-500"
-                            }`}
-                    >
-                        SAVED
-                    </button>
-                }
-
             </div>
 
             {/* POSTS */}
-            <PostListing user={true} rawPosts={data} posts={posts} userData={userData} avatarUrl={avatarUrl} setOpenMenu={setOpenMenu} openMenu={openMenu} />
+            <PostListing user={false} rawPosts={data} posts={posts} userData={userData} avatarUrl={avatarUrl} setOpenMenu={setOpenMenu} openMenu={openMenu} />
 
         </>
     );

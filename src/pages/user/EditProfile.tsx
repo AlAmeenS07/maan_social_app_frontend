@@ -86,7 +86,7 @@ export default function EditProfile() {
 
     }, [user, profile, reset]);
 
-    useClickOutside(locationRef, setShowLocations);
+    useClickOutside(locationRef, () => setShowLocations(false));
 
     const handleSelectLocation = (location: string) => {
         setValue("location", location);

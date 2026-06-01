@@ -2,15 +2,14 @@ import { useEffect, useState } from "react";
 import AdminLayout from "../../layout/AdminLayout";
 import ProfileHeader from "../../compponents/ProfileHeader";
 import SocialLinksModal from "../../compponents/SocialLinksModal";
-import ProfileContent from "../../compponents/ProfileContent";
 import { useParams } from "react-router-dom";
 import { useAdminUserDetail } from "../../hooks/admin/users/useAdminUserDetial";
 import type { ProfileLinkType } from "../../types/user/user.profile";
+import AdminUsedrProfileContent from "../../compponents/AdminUserProfileContent";
 
 export default function AdminUserDetail() {
 
     const [openLinks, setOpenLinks] = useState(false);
-
     const { id } = useParams()
 
     const { data: response } = useAdminUserDetail(id as string)
@@ -106,7 +105,7 @@ export default function AdminUserDetail() {
                 </div>
 
                 {/* POSTS */}
-                <ProfileContent user={false}/>
+                <AdminUsedrProfileContent id={id as string} userData={data?.user} profile={data?.profile}/>
 
             </div>
 
