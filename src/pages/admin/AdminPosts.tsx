@@ -10,7 +10,6 @@ import Swal from "sweetalert2";
 import AdminLayout from "../../layout/AdminLayout";
 import Pagination from "../../compponents/pagination";
 import PostTable from "../../compponents/PostTable";
-import { useAdminUsersStatus } from "../../hooks/admin/users/useAdminUsersStatus";
 import { useAdminTogglePost } from "../../hooks/admin/post/useAdminTogglePost";
 
 
