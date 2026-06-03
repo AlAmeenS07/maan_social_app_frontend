@@ -5,7 +5,7 @@ import { refreshTokenApi } from "../api/user/auth.api";
 import type { RefreshApiPayload } from "../App";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5005", 
+  baseURL: import.meta.env.VITE_API_GATEWAY, 
   withCredentials: true,
 });
 

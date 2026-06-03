@@ -124,8 +124,8 @@ export default function AdminPosts() {
                         className="border px-4 py-2 rounded-lg"
                     >
                         <option value="">All Status</option>
-                        <option value="active">active</option>
-                        <option value="blocked">blocked</option>
+                        <option value="listed">listed</option>
+                        <option value="unlisted">unlisted</option>
                     </select>
 
                     {/* DATE RANGE GROUP */}
